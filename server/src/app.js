@@ -3,7 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import errorHandler from './middlewares/error.middleware.js';
 import authRouter from './routes/auth.route.js';
- 
+import superAdminRouter from './routes/superAdmin.route.js';
+dotenv.config();
 const app = express();
 
 app.use(express.json());
@@ -22,6 +23,8 @@ app.use(
 
 
 app.use("/api/auth", authRouter);
+app.use("/api/superadmin", superAdminRouter);
+app.use("/api/admin", adminRouter);
 
 
 app.use(errorHandler);

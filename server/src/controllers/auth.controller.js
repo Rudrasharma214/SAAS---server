@@ -8,6 +8,18 @@ import Company from "../models/company.model.js";
 
 
 
+export const getCurrentUser = (req, res) => {
+  try {
+    if (!req.user) {
+      return sendResponse(res, STATUS.UNAUTHORIZED, "Unauthorized");
+    }
+    sendResponse(res, STATUS.OK, "Current user fetched successfully", req.user);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, "An error occurred while fetching current user"));
+  } 
+};
+
+
 export const registerAdmin = async (req, res,next) => {
   try {
     const { name, email, password } = req.body;
@@ -91,3 +103,17 @@ export const login = async (req, res,next) => {
       next(new AppError(STATUS.INTERNAL_ERROR, "An error occurred while logging in"));
     }
 };
+
+export const logout = (req, res) => {
+  try {
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    sendResponse(res, STATUS.OK, "Logout successful");
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, "An error occurred while logging out"));
+  } 
+};
+
