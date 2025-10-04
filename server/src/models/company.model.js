@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const companySchema = new mongoose.Schema({
   name: {
@@ -8,25 +8,25 @@ const companySchema = new mongoose.Schema({
 
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
-  sector:{
+  sector: {
     type: String,
     required: true,
   },
   subscription: {
     planId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Plan",
+      ref: 'Plan',
       required: true,
     },
     startDate: { type: Date, default: Date.now },
     endDate: { type: Date, required: true },
     status: {
       type: String,
-      enum: ["active", "blocked", "expired"],
-      default: "active",
+      enum: ['active', 'blocked', 'expired'],
+      default: 'active',
     },
     maxManagers: { type: Number, required: true },
     currentManagers: { type: Number, default: 0 },
@@ -42,7 +42,6 @@ const companySchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const Company = mongoose.model("Company", companySchema);
+const Company = mongoose.model('Company', companySchema);
 
 export default Company;
-

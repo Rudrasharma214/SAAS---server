@@ -4,7 +4,7 @@
  * Now I can throw errors with proper HTTP status codes and better debugging info!
  */
 
-import STATUS from "../constant/statusCode.js";
+import STATUS from '../constant/statusCode.js';
 
 class AppError extends Error {
   constructor(statusCode = STATUS.INTERNAL_ERROR, message) {

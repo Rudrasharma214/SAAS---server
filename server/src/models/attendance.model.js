@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const attendanceSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   companyId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
+    ref: 'Company',
     required: true,
   },
 
@@ -30,13 +30,13 @@ const attendanceSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["present", "absent", "leave"],
-    default: "absent",
+    enum: ['present', 'absent', 'leave'],
+    default: 'absent',
   },
   leaveHours: { type: Number, default: 0 },
 });
 
 attendanceSchema.index({ userId: 1, date: 1 }, { unique: true });
 
-const Attendance = mongoose.model("Attendance", attendanceSchema);
+const Attendance = mongoose.model('Attendance', attendanceSchema);
 export default Attendance;

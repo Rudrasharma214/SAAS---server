@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
- 
+
 // console.log('MONGO_URI from env:', process.env.MONGO_URI);
 // console.log('Attempting to connect to MongoDB...');
 

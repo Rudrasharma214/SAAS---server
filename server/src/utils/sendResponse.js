@@ -4,7 +4,7 @@
  * No more scattered response formats throughout my codebase!
  */
 
-import STATUS from "../constant/statusCode.js";
+import STATUS from '../constant/statusCode.js';
 
 // import { STATUS } from "../constants/statusCodes.js";
 
@@ -24,5 +24,3 @@ export const sendResponse = (res, statusCode = STATUS.OK, message = 'Success', d
     status: statusCode,
   });
 };
-
-

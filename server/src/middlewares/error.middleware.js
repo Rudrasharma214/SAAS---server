@@ -5,8 +5,8 @@
  * It also protects sensitive stack traces in production.
  */
 
-import STATUS from "../constant/statusCode.js";
-import AppError from "../utils/AppError.js";
+import STATUS from '../constant/statusCode.js';
+import AppError from '../utils/AppError.js';
 
 const errorHandler = (err, req, res, next) => {
   // Smart status code detection - use my AppError codes or default to 500
