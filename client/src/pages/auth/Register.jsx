@@ -64,7 +64,7 @@ const Register = () => {
       if (response.success !== false) {
         setSuccess('Admin registered successfully! Please login with your credentials.');
         setFormData({ name: '', email: '', password: '', confirmPassword: '' });
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate('/login'), 1000);
       }
     } catch (err) {
       console.error('Registration error:', err);

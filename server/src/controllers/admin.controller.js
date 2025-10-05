@@ -6,25 +6,39 @@ import AppError from '../utils/AppError.js';
 
 export const registerCompany = async (req, res, next) => {
   try {
-    const adminId = req.user._id;
-    const { name, address, sector } = req.body;
+    const ownerId = req.user._id;
+    const {
+      name,
+      type,
+      address,
+      contactEmail,
+      website,
+    } = req.body;
+
+    // Check if company with same name exists
     const existingCompany = await Company.findOne({ name });
     if (existingCompany) {
       return sendResponse(res, STATUS.BAD_REQUEST, 'Company already exists');
     }
+
     const newCompany = await Company.create({
+      ownerId,
       name,
-      address,
-      sector,
-      owner: adminId,
+      type,
+      contactEmail,
+      website,
+      address
     });
+
     await newCompany.save();
-    await User.findByIdAndUpdate(adminId, { $set: { companyId: newCompany._id } });
+    await User.findByIdAndUpdate(ownerId, { $set: { companyId: newCompany._id } });
+
     sendResponse(res, STATUS.CREATED, 'Company registered successfully', newCompany);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));
   }
 };
+
 
 export const getCompanyDetails = async (req, res, next) => {
   try {

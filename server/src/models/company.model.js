@@ -1,17 +1,16 @@
 import mongoose from 'mongoose';
 
 const companySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  sector: {
+  name: {
+    type: String,
+    required: true,
+  },
+  type: {
     type: String,
     required: true,
   },
@@ -33,10 +32,18 @@ const companySchema = new mongoose.Schema({
     maxEmployees: { type: Number, required: true },
     currentEmployees: { type: Number, default: 0 },
   },
-
-  address: {
-    type: String,
-    required: true,
+  contactEmail: { 
+    type: String 
+  },
+  website: { 
+    type: String 
+  },
+  logoUrl: { 
+    type: String 
+  },
+  isVerified: { 
+    type: Boolean, 
+    default: false 
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

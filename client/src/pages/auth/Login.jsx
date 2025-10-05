@@ -16,20 +16,15 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && user && !loading) {
-      toast.success(`Welcome back, ${user.name}!`);
-      
-      // Navigate based on user role
+      // toast.success(`Welcome back, ${user.name}!`);
       if (user.role === 'super_admin') {
-        navigate('/superadmin/dashboard');
+        navigate('/admin/dashboard');
       } else if (user.role === 'company_owner') {
         navigate('/admin/dashboard');
       } else if (user.role === 'manager') {
         navigate('/manager/dashboard');
       } else if (user.role === 'user') {
         navigate('/user/dashboard');
-      } else {
-        // Default fallback
-        navigate('/login');
       }
     }
   }, [isAuthenticated, user, loading, navigate]);
@@ -62,17 +57,18 @@ const Login = () => {
       setIsSubmitting(true);
       setError('');
       const res = await handleLogin(formData);
-      // The role might be in res.data.role or res.role depending on the response structure
-      const role = res?.data?.role || res?.role;
-      
-      console.log('Login response:', res); // Debug log
-      console.log('User data:', res?.data); // Debug log
-      console.log('User role:', role); // Debug log
-      
+      const role = res.data.role;
       toast.success('Login successful! Welcome back.', { id: loadingToast });
       
-      // Don't navigate here - let the useEffect handle it after auth state is updated
-      console.log('Login successful, waiting for auth state update...');
+      if (role === 'super_admin') {
+        navigate('/admin/dashboard');
+      } else if (role === 'company_owner') {
+        navigate('/admin/dashboard');
+      } else if (role === 'manager') {
+        navigate('/manager/dashboard');
+      } else if (role === 'user') {
+        navigate('/user/dashboard');
+      }
     } catch (err) {
       console.error('Login error:', err);
       let errorMessage = 'Login failed. Please try again.';

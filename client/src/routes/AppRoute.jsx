@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import OpenRoute from './OpenRoute';
 import ProtectedRoute from './ProtectedRoute';
-import SuperAdminDashboard from '../pages/superAdmin/SuperAdminDashboard.jsx';
+import SuperAdminDashboard from '../pages/superadmin/SuperAdminDashboard.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
 import UserDashboard from '../pages/user/UserDashboard.jsx';
@@ -37,9 +37,7 @@ const AppRoute = () => {
       </Route>
 
       <Route path="/unauthorized" element={<Unauthorized />} />
-      
-      {/* Root route redirect */}
-      <Route path="/" element={<Login />} />
+
       <Route path="*" element={<Login />} />
     </Routes>
   );
