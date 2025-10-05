@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { ShieldAlert } from "lucide-react"; // Optional icon
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ShieldAlert } from 'lucide-react'; // Optional icon
 
 const Unauthorized = () => {
   return (
@@ -9,7 +9,8 @@ const Unauthorized = () => {
         <ShieldAlert className="mx-auto mb-4 text-red-500" size={60} />
         <h1 className="text-4xl font-bold mb-3">Unauthorized Access</h1>
         <p className="text-gray-400 mb-8">
-          You don’t have permission to view this page. Please check your account role or log in again.
+          You don’t have permission to view this page. Please check your account role or log in
+          again.
         </p>
         <Link
           to="/"

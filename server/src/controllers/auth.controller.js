@@ -82,10 +82,10 @@ export const login = async (req, res, next) => {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
     });
 
-    sendResponse(res, STATUS.OK, 'Login successful', { authToken: token });
+    sendResponse(res, STATUS.OK, 'Login successful', { authToken: token, role: user.role });
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while logging in'));
   }
@@ -96,7 +96,7 @@ export const logout = (req, res) => {
     res.clearCookie('authToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
     });
     sendResponse(res, STATUS.OK, 'Logout successful');
   } catch (error) {

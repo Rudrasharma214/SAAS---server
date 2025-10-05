@@ -7,6 +7,6 @@ authRouter.post('/register', registerAdmin);
 authRouter.post('/login', login);
 
 authRouter.post('/logout', authenticate, logout);
-authRouter.post('/me', authenticate, getCurrentUser);
+authRouter.get('/me', authenticate, getCurrentUser);
 
 export default authRouter;

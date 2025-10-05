@@ -10,20 +10,12 @@ export const login = async (credentials) => {
   return response.data;
 };
 
-export const getProfile = async (token) => {
-  const response = await api.post('/auth/me', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getProfile = async () => {
+  const response = await api.get('/auth/me');
   return response.data;
 };
 
-export const logout = async (token) => {
-  const response = await api.post('/auth/logout', null, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const logout = async () => {
+  const response = await api.post('/auth/logout');
   return response.data;
 };

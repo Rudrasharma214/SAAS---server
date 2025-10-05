@@ -1,12 +1,12 @@
-import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/authContext";
-import Loader from "../components/Loader";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
+import Loader from '../components/Loader';
 const ProtectedRoute = ({ allowedRoles }) => {
   const { user, isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <Loader />; 
+    return <Loader />;
   }
 
   if (!isAuthenticated) {

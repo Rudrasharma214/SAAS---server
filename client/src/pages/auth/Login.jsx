@@ -1,42 +1,90 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/authContext';
 import { useNavigate, Link } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import { ShieldAlert } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { handleLogin, isAuthenticated, loading } = useAuth();
+  const { handleLogin, isAuthenticated, loading, user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && user && !loading) {
+      toast.success(`Welcome back, ${user.name}!`);
+      
+      // Navigate based on user role
+      if (user.role === 'super_admin') {
+        navigate('/superadmin/dashboard');
+      } else if (user.role === 'company_owner') {
+        navigate('/admin/dashboard');
+      } else if (user.role === 'manager') {
+        navigate('/manager/dashboard');
+      } else if (user.role === 'user') {
+        navigate('/user/dashboard');
+      } else {
+        // Default fallback
+        navigate('/login');
+      }
+    }
+  }, [isAuthenticated, user, loading, navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError('');
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) {
+      setError('');
+      toast.dismiss(); // Dismiss any existing error toasts when user starts typing
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
+      toast.error('Please fill in all fields');
       setError('Please fill in all fields');
       return;
     }
     if (!isValidEmail(formData.email)) {
+      toast.error('Please enter a valid email address');
       setError('Please enter a valid email address');
       return;
     }
+
+    const loadingToast = toast.loading('Signing you in...');
+
     try {
       setIsSubmitting(true);
       setError('');
-      await handleLogin(formData);
+      const res = await handleLogin(formData);
+      // The role might be in res.data.role or res.role depending on the response structure
+      const role = res?.data?.role || res?.role;
+      
+      console.log('Login response:', res); // Debug log
+      console.log('User data:', res?.data); // Debug log
+      console.log('User role:', role); // Debug log
+      
+      toast.success('Login successful! Welcome back.', { id: loadingToast });
+      
+      // Don't navigate here - let the useEffect handle it after auth state is updated
+      console.log('Login successful, waiting for auth state update...');
     } catch (err) {
       console.error('Login error:', err);
-      if (err.response?.data?.message) setError(err.response.data.message);
-      else if (err.message) setError(err.message);
-      else setError('Login failed. Please try again.');
+      let errorMessage = 'Login failed. Please try again.';
+
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      toast.error(errorMessage, { id: loadingToast });
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

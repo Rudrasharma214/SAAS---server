@@ -8,12 +8,12 @@ import { ShieldAlert } from 'lucide-react';
 const Register = () => {
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -26,7 +26,7 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (error) setError('');
     if (success) setSuccess('');
   };
@@ -34,12 +34,15 @@ const Register = () => {
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateForm = () => {
-    if (!formData.name.trim()) return setError('Name is required'), false;
-    if (!formData.email) return setError('Email is required'), false;
-    if (!isValidEmail(formData.email)) return setError('Please enter a valid email address'), false;
-    if (!formData.password) return setError('Password is required'), false;
-    if (formData.password.length < 6) return setError('Password must be at least 6 characters long'), false;
-    if (formData.password !== formData.confirmPassword) return setError('Passwords do not match'), false;
+    if (!formData.name.trim()) return (setError('Name is required'), false);
+    if (!formData.email) return (setError('Email is required'), false);
+    if (!isValidEmail(formData.email))
+      return (setError('Please enter a valid email address'), false);
+    if (!formData.password) return (setError('Password is required'), false);
+    if (formData.password.length < 6)
+      return (setError('Password must be at least 6 characters long'), false);
+    if (formData.password !== formData.confirmPassword)
+      return (setError('Passwords do not match'), false);
     return true;
   };
 
@@ -49,12 +52,13 @@ const Register = () => {
 
     try {
       setIsSubmitting(true);
-      setError(''); setSuccess('');
+      setError('');
+      setSuccess('');
 
       const response = await register({
         name: formData.name.trim(),
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       });
 
       if (response.success !== false) {
@@ -87,7 +91,9 @@ const Register = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1">
+              Full Name
+            </label>
             <input
               type="text"
               id="name"
@@ -105,7 +111,9 @@ const Register = () => {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">
+              Email Address
+            </label>
             <input
               type="email"
               id="email"
@@ -123,7 +131,9 @@ const Register = () => {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1">
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -141,7 +151,12 @@ const Register = () => {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
+              Confirm Password
+            </label>
             <input
               type="password"
               id="confirmPassword"
@@ -151,7 +166,9 @@ const Register = () => {
               placeholder="Confirm your password"
               disabled={isSubmitting}
               className={`w-full px-4 py-3 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition ${
-                error && formData.password !== formData.confirmPassword ? 'border-red-500 ring-red-200' : 'border-gray-300'
+                error && formData.password !== formData.confirmPassword
+                  ? 'border-red-500 ring-red-200'
+                  : 'border-gray-300'
               }`}
               required
             />
@@ -172,7 +189,13 @@ const Register = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isSubmitting || !formData.name || !formData.email || !formData.password || !formData.confirmPassword}
+            disabled={
+              isSubmitting ||
+              !formData.name ||
+              !formData.email ||
+              !formData.password ||
+              !formData.confirmPassword
+            }
             className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-lg hover:scale-[1.02] transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
@@ -189,7 +212,7 @@ const Register = () => {
         {/* Footer */}
         <div className="text-center mt-6 space-y-2 text-sm text-gray-500">
           <p>
-            Already have an account? 
+            Already have an account?
             <Link to="/login" className="text-indigo-500 font-semibold ml-1 hover:underline">
               Sign in here
             </Link>

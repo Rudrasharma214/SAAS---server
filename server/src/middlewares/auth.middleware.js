@@ -6,7 +6,8 @@ import { sendResponse } from "../utils/sendResponse.js";
 export const authenticate = async (req, res, next) => {
   try {
     const token =
-      req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
+      req.cookies?.authToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
       return sendResponse(res, STATUS.UNAUTHORIZED, "No token provided");

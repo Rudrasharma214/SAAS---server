@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import { getProfile, logout,login } from "../services/authServices";
+import { createContext, useState, useEffect, useContext } from 'react';
+import { getProfile, logout, login } from '../services/authServices';
 
 const AuthContext = createContext();
 
@@ -8,13 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
         const res = await getProfile();
-        setUser(res.user);
+        setUser(res.data);
         setIsAuthenticated(true);
       } catch (err) {
         setUser(null);
@@ -29,12 +28,16 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogin = async (credentials) => {
     try {
-        const res = await login(credentials);
-        // console.log(res);
-        setUser(res.user);
-        setIsAuthenticated(true);
+      await login(credentials);
+      const res = await getProfile();
+      setUser(res.data);
+      setIsAuthenticated(true);
+      return res;
     } catch (error) {
-        console.error("Login failed:", error);
+      console.error('Login failed:', error);
+      setIsAuthenticated(false);
+      setUser(null);
+      throw error; // Re-throw the error so it can be caught in Login.jsx
     } finally {
       setLoading(false);
     }
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setIsAuthenticated(false);
     } catch (err) {
-      console.error("Logout failed:", err);
+      console.error('Logout failed:', err);
     } finally {
       setLoading(false);
     }
