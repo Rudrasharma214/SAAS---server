@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
     enum: ['super_admin', 'company_owner', 'manager', 'user'],
     required: true,
   },
-
   companyId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
@@ -31,6 +30,10 @@ const userSchema = new mongoose.Schema({
   managerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+  },
+  isRegistered: {
+    type: Boolean,
+    default: false,
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

@@ -32,7 +32,7 @@ export const registerCompany = async (req, res, next) => {
 
     await newCompany.save();
     await User.findByIdAndUpdate(ownerId, { $set: { companyId: newCompany._id } });
-
+    await User.findByIdAndUpdate(ownerId, { $set: { isRegistered: true } });
     sendResponse(res, STATUS.CREATED, 'Company registered successfully', newCompany);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));

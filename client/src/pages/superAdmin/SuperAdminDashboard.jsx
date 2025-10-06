@@ -1,60 +1,83 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Navbar from '../../components/Navbar';
 import SideBar, { SidebarItem } from '../../components/SideBar';
 import CompaniesList from '../../components/superAdmin/CompaniesList';
 import CompanyDetail from '../../components/superAdmin/CompanyDetail';
 import Plan from '../../components/superAdmin/Plan';
 import { useTheme } from '../../context/themeContext';
-import { LayoutDashboard, Building, Users, Package, Settings } from 'lucide-react';
+import { LayoutDashboard, Building, Package, Settings } from 'lucide-react';
 
 const SuperAdminDashboardContent = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [selectedCompany, setSelectedCompany] = useState(null);
   const { current: theme } = useTheme();
 
+  const sectionTitles = {
+    dashboard: 'Dashboard',
+    companies: 'Companies',
+    plans: 'Plans',
+    settings: 'Settings',
+  };
+
+  const activeSectionTitle = sectionTitles[activeSection] || 'Dashboard';
+
   const renderContent = () => {
     const contentWrapperClass = `
-      relative h-full flex flex-col overflow-hidden
-      ${theme.text} ${theme.border} shadow-sm rounded-lg m-4
-      ${theme.contentBg}
-      ${theme.glowEffects}
-    `;
+    h-full w-full flex flex-col overflow-hidden
+    ${theme.text} bg-transparent shadow-sm rounded-2xl transition-all 
+   
+  `;
+
+    const innerWrapper = `
+    flex-1 overflow-auto p-6
+  `;
 
     switch (activeSection) {
       case 'companies':
         return (
           <div className={contentWrapperClass}>
-            <div className="p-6 flex-1 overflow-auto">
+            <div className={innerWrapper}>
               {selectedCompany ? (
-                <CompanyDetail companyId={selectedCompany} onBack={() => setSelectedCompany(null)} />
+                <CompanyDetail
+                  companyId={selectedCompany}
+                  onBack={() => setSelectedCompany(null)}
+                />
               ) : (
                 <CompaniesList onCompanyClick={setSelectedCompany} />
               )}
             </div>
           </div>
         );
+
       case 'plans':
         return (
           <div className={contentWrapperClass}>
-            <div className="p-6 flex-1 overflow-auto">
+            <div className={innerWrapper}>
               <Plan />
             </div>
           </div>
         );
+
       case 'settings':
         return (
           <div className={contentWrapperClass}>
-            <div className="p-8">
+            <div className={innerWrapper}>
               <h1 className={`text-2xl ${theme.textPrimary} font-bold mb-4`}>Settings</h1>
               <p className={theme.textSecondary}>Settings functionality coming soon...</p>
             </div>
           </div>
         );
+
       default:
         return (
           <div className={contentWrapperClass}>
-            <div className="p-8">
-              <h1 className={`text-2xl ${theme.textPrimary} font-bold mb-4`}>Super Admin Dashboard</h1>
-              <p className={theme.textSecondary}>Welcome to the Super Admin Dashboard. Use the sidebar to navigate.</p>
+            <div className={innerWrapper}>
+              <h1 className={`text-2xl ${theme.textPrimary} font-bold mb-4`}>
+                Super Admin Dashboard
+              </h1>
+              <p className={theme.textSecondary}>
+                Welcome to the Super Admin Dashboard. Use the sidebar to navigate.
+              </p>
             </div>
           </div>
         );
@@ -63,38 +86,45 @@ const SuperAdminDashboardContent = () => {
 
   return (
     <div className={`flex h-screen ${theme.background}`}>
+      {/* Sidebar */}
       <SideBar>
-        <SidebarItem 
-          icon={<LayoutDashboard size={20} />} 
-          text="Dashboard" 
+        <SidebarItem
+          icon={<LayoutDashboard size={20} />}
+          text="Dashboard"
           active={activeSection === 'dashboard'}
           onClick={() => setActiveSection('dashboard')}
         />
-        <SidebarItem 
-          icon={<Building size={20} />} 
-          text="Companies" 
+        <SidebarItem
+          icon={<Building size={20} />}
+          text="Companies"
           active={activeSection === 'companies'}
           onClick={() => {
             setActiveSection('companies');
             setSelectedCompany(null);
           }}
         />
-        <SidebarItem 
-          icon={<Package size={20} />} 
-          text="Plans" 
+        <SidebarItem
+          icon={<Package size={20} />}
+          text="Plans"
           active={activeSection === 'plans'}
           onClick={() => setActiveSection('plans')}
         />
-        <SidebarItem 
-          icon={<Settings size={20} />} 
-          text="Settings" 
+        <SidebarItem
+          icon={<Settings size={20} />}
+          text="Settings"
           active={activeSection === 'settings'}
           onClick={() => setActiveSection('settings')}
         />
       </SideBar>
-      <main className="flex-1 flex flex-col">
-        {renderContent()}
-      </main>
+
+      {/* Main Area */}
+      <div className="flex flex-col flex-1 h-screen overflow-hidden">
+        {/* Navbar is separated and dynamic */}
+        <Navbar title={activeSectionTitle} />
+        <div className="flex-1 h-full w-80vw overflow-hidden border rounded-2xl m-1 border-zinc-800">
+          {renderContent()}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldAlert } from 'lucide-react'; // Optional icon
+import { useAuth } from "../../context/authContext";
 
 const Unauthorized = () => {
+  const { handleLogout } = useAuth();
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-6 text-center">
       <div className="bg-gray-800/50 backdrop-blur-lg p-10 rounded-2xl shadow-2xl border border-gray-700 animate-fadeIn">
@@ -14,6 +17,7 @@ const Unauthorized = () => {
         </p>
         <Link
           to="/"
+          onClick={() => {handleLogout();}}
           className="px-6 py-3 bg-red-600 hover:bg-red-700 transition-all duration-200 rounded-lg font-semibold"
         >
           Go Back Home

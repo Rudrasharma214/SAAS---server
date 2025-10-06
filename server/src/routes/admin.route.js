@@ -17,6 +17,7 @@ const adminRouter = express.Router();
 adminRouter.use(authenticate);
 
 adminRouter.post('/register', registerCompany);
+
 adminRouter.get('/company-details', getCompanyDetails);
 adminRouter.get('/managers', getAllManagers);
 adminRouter.get('/employees', getAllEmployees);

@@ -1,4 +1,4 @@
-import { Sun, Moon, MoreVertical } from "lucide-react";
+import { Sun, Moon, MoreVertical, Menu, X } from "lucide-react";
 import React, { useContext, createContext, useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/authContext";
 import { useTheme } from "../context/themeContext";
@@ -6,11 +6,10 @@ import { useTheme } from "../context/themeContext";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true); // Default open
   const { user, handleLogout } = useAuth();
   const { current: theme, toggleTheme, isDarkMode } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
-
   const userMenuRef = useRef(null);
 
   // Close user menu when clicking outside
@@ -30,25 +29,37 @@ export default function Sidebar({ children }) {
     <div className={`h-screen flex items-center justify-start p-4 ${isDarkMode ? "bg-zinc-950/90" : "bg-gray-100/90"}`}>
       <aside
         className={`
-          h-[90vh] w-auto
+          h-[95vh]
+          ${expanded ? "w-64" : "w-20"}
           rounded-2xl
           ${isDarkMode ? "shadow-[0_0_25px_rgba(0,0,0,0.5)]" : "shadow-[0_0_25px_rgba(0,0,0,0.1)]"}
           ${theme.border}
           overflow-visible
-          transition-all
+          transition-all duration-500
           backdrop-blur-lg
           relative
         `}
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
       >
         <nav className={`relative h-full flex flex-col overflow-visible ${theme.text} ${theme.sidebarBg} ${theme.glowEffects} rounded-2xl`}>
-          {/* Top Logo */}
+          
+          {/* 🔘 Toggle Button and Logo */}
           <div className="p-4 pb-2 flex justify-between items-center">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className={`p-2 rounded-lg transition-colors duration-300 ${
+                isDarkMode
+                  ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-100"
+                  : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+              }`}
+              title={expanded ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {expanded ? <X size={20} /> : <Menu size={20} />}
+            </button>
+
             <img
               src="https://img.logoipsum.com/243.svg"
               alt="Logo"
-              className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}
+              className={`overflow-hidden transition-all ${expanded ? "w-28 ml-2" : "w-0"}`}
             />
           </div>
 
@@ -66,7 +77,6 @@ export default function Sidebar({ children }) {
             />
 
             <div className={`flex items-center transition-all ${expanded ? "w-52 ml-3" : "ml-3"}`}>
-              {/* User Info - Only show when expanded */}
               {expanded && (
                 <div className="flex-1 min-w-0 mr-2">
                   <h4 className={`font-semibold ${theme.textPrimary} whitespace-nowrap overflow-hidden text-ellipsis`}>
@@ -78,7 +88,6 @@ export default function Sidebar({ children }) {
                 </div>
               )}
 
-              {/* 3-Dots Menu - Only show when expanded */}
               {expanded && (
                 <div className="relative" ref={userMenuRef}>
                   <button
@@ -93,51 +102,48 @@ export default function Sidebar({ children }) {
                     <MoreVertical size={18} className={theme.text} />
                   </button>
 
-                {/* 3-Options Popup Menu */}
-                {showUserMenu && (
-                  <div
-                    className={`absolute bottom-full right-0 mb-2 w-44 rounded-md shadow-lg border z-50
+                  {/* Popup Menu */}
+                  {showUserMenu && (
+                    <div
+                      className={`absolute bottom-full right-0 mb-2 w-44 rounded-md shadow-lg border z-50
                       ${isDarkMode ? "bg-zinc-900 border-zinc-700" : "bg-white border-gray-300"}`}
-                  >
-                    <button
-                      className={`w-full text-left px-4 py-2 hover:bg-indigo-600 hover:text-white transition rounded-t-md flex items-center gap-2 ${
-                        isDarkMode ? "text-zinc-200" : "text-gray-700"
-                      }`}
-                      onClick={() => {
-                        console.log("Go to Profile");
-                        setShowUserMenu(false);
-                      }}
                     >
-                      <span>👤</span> Profile
-                    </button>
-                    <button
-                      className={`w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white transition flex items-center gap-2 ${
-                        isDarkMode ? "text-zinc-200" : "text-gray-700"
-                      }`}
-                      onClick={() => {
-                        toggleTheme();
-                        setShowUserMenu(false);
-                      }}
-                    >
-                      {isDarkMode ? (
-                        <><Sun size={16} className="text-yellow-400" /> Light Mode</>
-                      ) : (
-                        <><Moon size={16} className="text-indigo-600" /> Dark Mode</>
-                      )}
-                    </button>
-                    <button
-                      className={`w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition rounded-b-md flex items-center gap-2 ${
-                        isDarkMode ? "text-zinc-200" : "text-gray-700"
-                      }`}
-                      onClick={() => {
-                        handleLogout();
-                        setShowUserMenu(false);
-                      }}
-                    >
-                      <span>🚪</span> Logout
-                    </button>
-                  </div>
-                )}
+                      <button
+                        className={`w-full text-left px-4 py-2 hover:bg-indigo-600 hover:text-white transition rounded-t-md flex items-center gap-2 ${
+                          isDarkMode ? "text-zinc-200" : "text-gray-700"
+                        }`}
+                      >
+                        👤 Profile
+                      </button>
+                      <button
+                        className={`w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white transition flex items-center gap-2 ${
+                          isDarkMode ? "text-zinc-200" : "text-gray-700"
+                        }`}
+                        onClick={() => {
+                          toggleTheme();
+                          setShowUserMenu(false);
+                        }}
+                      >
+                        {isDarkMode ? (
+                          <>
+                            <Sun size={16} className="text-yellow-400" /> Light Mode
+                          </>
+                        ) : (
+                          <>
+                            <Moon size={16} className="text-indigo-600" /> Dark Mode
+                          </>
+                        )}
+                      </button>
+                      <button
+                        className={`w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition rounded-b-md flex items-center gap-2 ${
+                          isDarkMode ? "text-zinc-200" : "text-gray-700"
+                        }`}
+                        onClick={handleLogout}
+                      >
+                        🚪 Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -158,7 +164,7 @@ export function SidebarItem({ icon, text, active, alert, onClick }) {
       onClick={onClick}
       className={`
         relative flex items-center py-2 px-3 my-1
-        font-medium rounded-md cursor-pointer transition-colors group
+        font-medium rounded-md cursor-pointer transition-colors
         ${active
           ? `${theme.activeBg} ${theme.textPrimary} shadow-inner ring-1 ${
               isDarkMode ? "ring-zinc-700" : "ring-blue-200"
@@ -168,42 +174,24 @@ export function SidebarItem({ icon, text, active, alert, onClick }) {
     >
       {/* Active bar */}
       {active && (
-        <span
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-full bg-gradient-to-b from-indigo-500 via-fuchsia-500 to-sky-400"
-        />
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-full bg-gradient-to-b from-indigo-500 via-fuchsia-500 to-sky-400" />
       )}
 
       {/* Icon */}
       <span className={theme.text}>{icon}</span>
 
       {/* Text */}
-      <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+      {expanded && <span className="ml-3">{text}</span>}
 
       {/* Alert Dot */}
       {alert && (
         <div
           className={`absolute right-2 w-2 h-2 rounded-full bg-indigo-400/90 ring-2 ${
             isDarkMode ? "ring-zinc-950" : "ring-white"
-          } ${expanded ? "" : "top-2"}`}
+          }`}
         />
-      )}
-
-      {/* Tooltip when collapsed */}
-      {!expanded && (
-        <div
-          className={`
-            absolute left-full rounded-md px-2 py-1 ml-6
-            ${theme.contentBg} ${theme.text} text-sm
-            ring-1 ${theme.border} shadow-xl
-            invisible opacity-0 -translate-x-3
-            transition-all
-            group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-          `}
-        >
-          {text}
-        </div>
       )}
     </li>
   );
 }
- 
+
