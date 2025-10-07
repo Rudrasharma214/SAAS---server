@@ -62,9 +62,7 @@ const Plan = () => {
   };
 
   return (
-    <div
-      className={`min-h-60vh p-6 transition-colors overflow-hidden bg-transparent`}
-    >
+    <div className={`min-h-60vh p-6 transition-colors overflow-hidden bg-transparent`}>
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold tracking-wide">Subscription Plans</h2>

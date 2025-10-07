@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { getProfile, logout, login } from '../services/authServices';
 
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -33,15 +32,15 @@ export const AuthProvider = ({ children }) => {
       await login(credentials);
       const res = await getProfile();
       setUser(res.data);
-      setIsRegistered(true)
+      setIsRegistered(true);
       setIsAuthenticated(true);
       return res;
     } catch (error) {
       console.error('Login failed:', error);
       setIsAuthenticated(false);
-      setIsRegistered(false)
+      setIsRegistered(false);
       setUser(null);
-      throw error; 
+      throw error;
     } finally {
       setLoading(false);
     }

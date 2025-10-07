@@ -22,10 +22,11 @@ const AppRoute = () => {
       </Route>
 
       <Route
-        path="/superadmin/dashboard" element={<ProtectedRoute allowedRoles={['super_admin']} />}>
+        path="/superadmin/dashboard"
+        element={<ProtectedRoute allowedRoles={['super_admin']} />}
+      >
         <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
       </Route>
-
 
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['company_owner']} />}>
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -50,6 +51,3 @@ const AppRoute = () => {
 };
 
 export default AppRoute;
-
-
- 

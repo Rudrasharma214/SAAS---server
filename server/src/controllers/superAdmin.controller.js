@@ -2,8 +2,6 @@ import AppError from '../utils/AppError.js';
 import STATUS from '../constant/statusCode.js';
 import { sendResponse } from '../utils/sendResponse.js';
 import User from '../models/user.model.js';
-import bcrypt from 'bcryptjs';
-import generateToken from '../utils/token.js';
 import Company from '../models/company.model.js';
 import Plan from '../models/plan.model.js';
 
@@ -38,7 +36,6 @@ export const getAllCompanies = async (req, res, next) => {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while fetching companies'));
   }
 };
-
 
 export const deleteCompany = async (req, res, next) => {
   try {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldAlert } from 'lucide-react'; // Optional icon
-import { useAuth } from "../../context/authContext";
+import { useAuth } from '../../context/authContext';
 
 const Unauthorized = () => {
   const { handleLogout } = useAuth();
@@ -17,7 +17,9 @@ const Unauthorized = () => {
         </p>
         <Link
           to="/"
-          onClick={() => {handleLogout();}}
+          onClick={() => {
+            handleLogout();
+          }}
           className="px-6 py-3 bg-red-600 hover:bg-red-700 transition-all duration-200 rounded-lg font-semibold"
         >
           Go Back Home

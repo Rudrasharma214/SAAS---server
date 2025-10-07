@@ -32,18 +32,18 @@ const companySchema = new mongoose.Schema({
     maxEmployees: { type: Number, required: true },
     currentEmployees: { type: Number, default: 0 },
   },
-  contactEmail: { 
-    type: String 
+  contactEmail: {
+    type: String,
   },
-  website: { 
-    type: String 
+  website: {
+    type: String,
   },
-  logoUrl: { 
-    type: String 
+  logoUrl: {
+    type: String,
   },
-  isVerified: { 
-    type: Boolean, 
-    default: false 
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

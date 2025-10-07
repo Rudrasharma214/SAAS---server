@@ -77,8 +77,8 @@ const CompanyRegister = () => {
               step === idx + 1
                 ? 'bg-indigo-600 text-white'
                 : step > idx + 1
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-300 text-gray-600'
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-300 text-gray-600'
             }`}
           >
             {idx + 1}

@@ -5,11 +5,10 @@ export const getAllCompanies = async (page = 1, limit = 10) => {
   return response.data;
 };
 
-
 export const getCompanyById = async (companyId) => {
   const response = await api.get(`/superadmin/companies/${companyId}`);
   return response.data;
-}
+};
 
 export const createPlan = async (planData) => {
   const response = await api.post('/superadmin/create-plans', planData);

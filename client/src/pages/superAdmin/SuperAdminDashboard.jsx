@@ -10,7 +10,9 @@ import { LayoutDashboard, Building, Package, Settings } from 'lucide-react';
 const SuperAdminDashboardContent = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const { current: theme } = useTheme();
+  const { isDarkMode } = useTheme();
+
+  
 
   const sectionTitles = {
     dashboard: 'Dashboard',
@@ -24,7 +26,7 @@ const SuperAdminDashboardContent = () => {
   const renderContent = () => {
     const contentWrapperClass = `
     h-full w-full flex flex-col overflow-hidden
-    ${theme.text} bg-transparent shadow-sm rounded-2xl transition-all 
+    ${isDarkMode ? 'text-zinc-200 bg-transparent' : 'text-white bg-transparent'} transition-all
    
   `;
 
@@ -62,8 +64,8 @@ const SuperAdminDashboardContent = () => {
         return (
           <div className={contentWrapperClass}>
             <div className={innerWrapper}>
-              <h1 className={`text-2xl ${theme.textPrimary} font-bold mb-4`}>Settings</h1>
-              <p className={theme.textSecondary}>Settings functionality coming soon...</p>
+              <h1 className={`text-2xl ${isDarkMode ? 'text-zinc-200' : 'text-gray-900'} font-bold mb-4`}>Settings</h1>
+              <p className={isDarkMode ? 'text-zinc-400' : 'text-gray-600'}>Settings functionality coming soon...</p>
             </div>
           </div>
         );
@@ -72,10 +74,10 @@ const SuperAdminDashboardContent = () => {
         return (
           <div className={contentWrapperClass}>
             <div className={innerWrapper}>
-              <h1 className={`text-2xl ${theme.textPrimary} font-bold mb-4`}>
+              <h1 className={`text-2xl ${isDarkMode ? 'text-zinc-200' : 'text-gray-900'} font-bold mb-4`}>
                 Super Admin Dashboard
               </h1>
-              <p className={theme.textSecondary}>
+              <p className={isDarkMode ? 'text-zinc-400' : 'text-gray-600'}>
                 Welcome to the Super Admin Dashboard. Use the sidebar to navigate.
               </p>
             </div>
@@ -85,7 +87,7 @@ const SuperAdminDashboardContent = () => {
   };
 
   return (
-    <div className={`flex h-screen ${theme.background}`}>
+    <div className={`flex h-screen ${isDarkMode ? 'bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800' : 'bg-gradient-to-br from-zinc-100 via-zinc-200 to-zinc-300'}`}>
       {/* Sidebar */}
       <SideBar>
         <SidebarItem
@@ -121,7 +123,8 @@ const SuperAdminDashboardContent = () => {
       <div className="flex flex-col flex-1 h-screen overflow-hidden">
         {/* Navbar is separated and dynamic */}
         <Navbar title={activeSectionTitle} />
-        <div className="flex-1 h-full w-80vw overflow-hidden border rounded-2xl m-1 border-zinc-800">
+        <div className={`flex-1 h-full overflow-hidden
+          ${isDarkMode ? 'bg-gradient-to-r to-stone-800 from-slate-700' : 'bg-gradient-to-r to-indigo-400 from-blue-400'}`}>
           {renderContent()}
         </div>
       </div>

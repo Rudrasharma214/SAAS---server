@@ -7,13 +7,7 @@ import AppError from '../utils/AppError.js';
 export const registerCompany = async (req, res, next) => {
   try {
     const ownerId = req.user._id;
-    const {
-      name,
-      type,
-      address,
-      contactEmail,
-      website,
-    } = req.body;
+    const { name, type, address, contactEmail, website } = req.body;
 
     // Check if company with same name exists
     const existingCompany = await Company.findOne({ name });
@@ -27,7 +21,7 @@ export const registerCompany = async (req, res, next) => {
       type,
       contactEmail,
       website,
-      address
+      address,
     });
 
     await newCompany.save();
@@ -38,7 +32,6 @@ export const registerCompany = async (req, res, next) => {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));
   }
 };
-
 
 export const getCompanyDetails = async (req, res, next) => {
   try {

@@ -18,6 +18,8 @@ const Login = () => {
     if (isAuthenticated && user && !loading) {
       if (user.role === 'super_admin') {
         navigate('/superadmin/dashboard');
+      } else if (user.role === 'company_owner') {
+        navigate('/admin/dashboard');
       } else if (user.role === 'manager') {
         navigate('/manager/dashboard');
       } else if (user.role === 'user') {
@@ -26,17 +28,17 @@ const Login = () => {
     }
   }, [isAuthenticated, user, loading, navigate]);
 
-  useEffect(() => {
-    if (isAuthenticated && user && isRegistered && !loading) {
-      if (user.role === 'company_owner') {
-        if (user.isRegistered === false) {
-          navigate('/register-company');
-        } else {
-          navigate('/admin/dashboard');
-        }
-      }
-    }
-  }, [isAuthenticated, user, isRegistered, loading, navigate]);
+  // useEffect(() => {
+  //   if (isAuthenticated && user && isRegistered && !loading) {
+  //     if (user.role === 'company_owner') {
+  //       if (user.isRegistered === false) {
+  //         navigate('/register-company');
+  //       } else {
+  //         navigate('/admin/dashboard');
+  //       }
+  //     }
+  //   }
+  // }, [isAuthenticated, user, isRegistered, loading, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,9 +91,9 @@ const Login = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-600 to-purple-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-900 via-teal-700 to-purple-900 px-4">
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-10">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-t-xl"></div>
+        <div className="absolute top-0 left-0 right-0 h-1from-cyan-900 via-teal-700 to-purple-900 rounded-t-xl"></div>
 
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
