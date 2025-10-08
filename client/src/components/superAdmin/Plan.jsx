@@ -86,8 +86,8 @@ const Plan = () => {
               key={plan._id}
               className={`rounded-2xl p-6 shadow-lg backdrop-blur-sm border ${
                 isDarkMode
-                  ? 'bg-zinc-900/40 border-zinc-700/50 hover:bg-zinc-800/50'
-                  : 'bg-white/60 border-zinc-300 hover:bg-zinc-100/80'
+                  ? 'bg-zinc-900/40 border-zinc-700/50 text-white hover:bg-zinc-800/50'
+                  : 'bg-blue-300 border-zinc-300 hover:bg-blue-100/80'
               } transition-all duration-300`}
             >
               <div className="flex justify-between items-center mb-4">

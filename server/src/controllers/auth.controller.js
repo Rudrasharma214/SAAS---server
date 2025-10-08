@@ -85,7 +85,7 @@ export const login = async (req, res, next) => {
       sameSite: 'lax',
     });
 
-    sendResponse(res, STATUS.OK, 'Login successful', { authToken: token, role: user.role });
+    sendResponse(res, STATUS.OK, 'Login successful', { authToken: token, role: user.role, isRegistered: user.isRegistered });
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while logging in'));
   }

@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,16 +28,15 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogin = async (credentials) => {
     try {
-      await login(credentials);
-      const res = await getProfile();
-      setUser(res.data);
-      setIsRegistered(true);
+      const loginResponse = await login(credentials);
+      const profileResponse = await getProfile();
+      
+      setUser(profileResponse.data);
       setIsAuthenticated(true);
-      return res;
+      
+      return profileResponse;
     } catch (error) {
-      console.error('Login failed:', error);
       setIsAuthenticated(false);
-      setIsRegistered(false);
       setUser(null);
       throw error;
     } finally {
@@ -65,7 +63,6 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated,
         loading,
-        isRegistered,
         handleLogin,
         handleLogout,
       }}

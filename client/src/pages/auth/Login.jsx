@@ -6,8 +6,7 @@ import { ShieldAlert } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { handleLogin, isAuthenticated, isRegistered, loading, user } = useAuth();
-  console.log('User Data :- ', user);
+  const { handleLogin, isAuthenticated, loading, user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -15,11 +14,23 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    console.log('Login Navigation Check:', {
+      isAuthenticated,
+      user,
+      loading,
+      userRole: user?.role,
+      isRegistered: user?.isRegistered
+    });
+
     if (isAuthenticated && user && !loading) {
-      if (user.role === 'super_admin') {
+      if (user.role === 'company_owner') {
+        if (user.isRegistered === false) {
+          navigate('/register-company');
+        } else {
+          navigate('/admin/dashboard');
+        }
+      } else if (user.role === 'super_admin') {
         navigate('/superadmin/dashboard');
-      } else if (user.role === 'company_owner') {
-        navigate('/admin/dashboard');
       } else if (user.role === 'manager') {
         navigate('/manager/dashboard');
       } else if (user.role === 'user') {
@@ -28,17 +39,7 @@ const Login = () => {
     }
   }, [isAuthenticated, user, loading, navigate]);
 
-  // useEffect(() => {
-  //   if (isAuthenticated && user && isRegistered && !loading) {
-  //     if (user.role === 'company_owner') {
-  //       if (user.isRegistered === false) {
-  //         navigate('/register-company');
-  //       } else {
-  //         navigate('/admin/dashboard');
-  //       }
-  //     }
-  //   }
-  // }, [isAuthenticated, user, isRegistered, loading, navigate]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
