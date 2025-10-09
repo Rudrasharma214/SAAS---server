@@ -19,14 +19,19 @@ const AdminDashboard = () => {
 
   // Determine which section is active from the URL
   const path = location.pathname;
-  const activeSection =
-    path.includes('managers') ? 'managers' :
-    path.includes('users') ? 'users' :
-    path.includes('projects') ? 'projects' :
-    path.includes('attendance') ? 'attendance' :
-    path.includes('plans') ? 'plans' :
-    path.includes('settings') ? 'settings' :
-    'dashboard';
+  const activeSection = path.includes('managers')
+    ? 'managers'
+    : path.includes('users')
+      ? 'users'
+      : path.includes('projects')
+        ? 'projects'
+        : path.includes('attendance')
+          ? 'attendance'
+          : path.includes('plans')
+            ? 'plans'
+            : path.includes('settings')
+              ? 'settings'
+              : 'dashboard';
 
   const sectionTitles = {
     dashboard: 'Dashboard',

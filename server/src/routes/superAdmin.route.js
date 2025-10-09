@@ -5,6 +5,7 @@ import {
   deleteCompany,
   createPlan,
   getAllPlans,
+  getCompanyById,
 } from '../controllers/superAdmin.controller.js';
 
 import { authenticate } from '../middlewares/auth.middleware.js';
@@ -14,6 +15,7 @@ const superAdminRouter = express.Router();
 superAdminRouter.use(authenticate);
 
 superAdminRouter.get('/companies', getAllCompanies);
+superAdminRouter.get('/companies/:id', getCompanyById);
 superAdminRouter.delete('/companies/:id', deleteCompany);
 superAdminRouter.post('/create-plans', createPlan);
 superAdminRouter.get('/get-plans', authenticate, getAllPlans);

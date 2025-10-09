@@ -1,5 +1,6 @@
 import Company from '../models/company.model.js';
 import User from '../models/user.model.js';
+import Plan from '../models/plan.model.js';
 import { sendResponse } from '../utils/sendResponse.js';
 import STATUS from '../constant/statusCode.js';
 import AppError from '../utils/AppError.js';
@@ -7,13 +8,22 @@ import AppError from '../utils/AppError.js';
 export const registerCompany = async (req, res, next) => {
   try {
     const ownerId = req.user._id;
-    const { name, type, address, contactEmail, website } = req.body;
+    const { name, type, address, contactEmail, website, logourl, planId } = req.body;
 
     // Check if company with same name exists
     const existingCompany = await Company.findOne({ name });
     if (existingCompany) {
       return sendResponse(res, STATUS.BAD_REQUEST, 'Company already exists');
     }
+
+    const plan = await Plan.findById(planId);
+    if (!plan) {
+      return sendResponse(res, STATUS.NOT_FOUND, 'Plan not found');
+    }
+
+    const currentDate = new Date();
+    const endDate = new Date();
+    endDate.setDate(currentDate.getDate() + plan.durationInDays);
 
     const newCompany = await Company.create({
       ownerId,
@@ -22,11 +32,18 @@ export const registerCompany = async (req, res, next) => {
       contactEmail,
       website,
       address,
+      logoUrl: logourl,
+      subscription: {
+        planId: plan._id,
+        startDate: currentDate,
+        endDate: endDate,
+        status: 'active',
+        maxManagers: plan.maxManagers,
+        maxEmployees: plan.maxEmployees,
+      },
     });
 
-    await newCompany.save();
-    await User.findByIdAndUpdate(ownerId, { $set: { companyId: newCompany._id } });
-    await User.findByIdAndUpdate(ownerId, { $set: { isRegistered: true } });
+    await User.findByIdAndUpdate(ownerId, { $set: { companyId: newCompany._id, isRegistered: true } });
     sendResponse(res, STATUS.CREATED, 'Company registered successfully', newCompany);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));

@@ -36,21 +36,25 @@ const CompanyRegister = () => {
   const handlePayment = async () => {
     if (!selectedPlan) return alert('Please select a plan.');
     try {
-      const order = await createOrder(selectedPlan.price);
+      const response = await createOrder(selectedPlan.price);
+      const order = response.data;
       const options = {
-        key: 'YOUR_RAZORPAY_KEY_ID',
+        key: 'rzp_test_RR32EA0YhKP8k6',
         amount: order.amount,
         currency: order.currency,
-        name: 'Your Platform',
+        name: 'SAAS Platform',
         description: `Payment for ${selectedPlan.name}`,
         order_id: order.id,
+
         handler: async (response) => {
           try {
-            await verifyPayment({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            });
+            const paymentData = {
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: order.id,
+              razorpaySignature: response.razorpay_signature,
+              amount: selectedPlan.price,
+            };
+            await verifyPayment(paymentData);
             await registerCompany({ ...formData, planId: selectedPlan._id });
             alert('Company registered successfully!');
           } catch (error) {

@@ -25,7 +25,11 @@ const ProtectedRoute = ({ allowedRoles }) => {
     }
   }
 
-  if (user.role === 'company_owner' && user.isRegistered === true && location.pathname === '/register-company') {
+  if (
+    user.role === 'company_owner' &&
+    user.isRegistered === true &&
+    location.pathname === '/register-company'
+  ) {
     return <Navigate to="/admin/dashboard" replace />;
   }
 

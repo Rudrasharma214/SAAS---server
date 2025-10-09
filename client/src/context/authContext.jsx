@@ -30,10 +30,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const loginResponse = await login(credentials);
       const profileResponse = await getProfile();
-      
+
       setUser(profileResponse.data);
       setIsAuthenticated(true);
-      
+
       return profileResponse;
     } catch (error) {
       setIsAuthenticated(false);

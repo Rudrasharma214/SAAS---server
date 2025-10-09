@@ -11,11 +11,13 @@ const SuperAdminDashboard = () => {
 
   // Determine active section based on URL
   const path = location.pathname;
-  const activeSection =
-    path.includes('companies') ? 'companies' :
-    path.includes('plans') ? 'plans' :
-    path.includes('settings') ? 'settings' :
-    'dashboard';
+  const activeSection = path.includes('companies')
+    ? 'companies'
+    : path.includes('plans')
+      ? 'plans'
+      : path.includes('settings')
+        ? 'settings'
+        : 'dashboard';
 
   const sectionTitles = {
     dashboard: 'Dashboard',
@@ -29,7 +31,7 @@ const SuperAdminDashboard = () => {
       className={`flex h-screen ${
         isDarkMode
           ? 'bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800'
-          : 'bg-gradient-to-br from-zinc-100 via-zinc-200 to-zinc-300'
+          : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
       }`}
     >
       {/* Sidebar */}
@@ -64,10 +66,10 @@ const SuperAdminDashboard = () => {
       <div className="flex flex-col flex-1 h-screen overflow-hidden">
         <Navbar title={sectionTitles[activeSection]} />
         <div
-          className={`flex-1 h-full overflow-hidden ${
+          className={`flex-1 overflow-y-auto ${
             isDarkMode
               ? 'bg-gradient-to-r to-stone-800 from-slate-700'
-              : 'bg-gradient-to-r to-indigo-400 from-blue-400'
+              : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'
           }`}
         >
           {/* Nested Routes Render Here */}

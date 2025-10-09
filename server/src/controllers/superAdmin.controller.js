@@ -37,6 +37,23 @@ export const getAllCompanies = async (req, res, next) => {
   }
 };
 
+export const getCompanyById = async (req, res, next) => {
+  try {
+    const companyId = req.params.id;
+    const company = await Company.findById(companyId)
+      .populate('ownerId', '-password')
+      .populate('subscription.planId');
+
+    if (!company) {
+      return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
+    }
+    
+    sendResponse(res, STATUS.OK, 'Company fetched successfully', { company });
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while fetching company'));
+  }
+};
+
 export const deleteCompany = async (req, res, next) => {
   try {
     const companyId = req.params.id;

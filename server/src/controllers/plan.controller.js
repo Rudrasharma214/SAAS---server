@@ -49,6 +49,7 @@ export const subscribePlan = async (req, res, next) => {
 export const createOrder = async (req, res, next) => {
   try {
     const { amount } = req.body;
+    console.log(amount)
     const order = await razorpay.orders.create({
       amount: amount * 100,
       currency: 'INR',
@@ -62,19 +63,23 @@ export const createOrder = async (req, res, next) => {
 
 export const verifyPayment = async (req, res, next) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-    const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
-    hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
-    const generated_signature = hmac.digest('hex');
-    if (generated_signature === razorpay_signature) {
-      return sendResponse(res, STATUS.OK, 'Payment verified successfully');
-    } else {
-      return sendResponse(
-        res,
-        STATUS.BAD_REQUEST,
-        'Invalid signature, payment verification failed'
-      );
+    const { razorpayPaymentId, razorpayOrderId, razorpaySignature, amount } = req.body;
+
+    if (!razorpayPaymentId || !razorpayOrderId || !razorpaySignature || !amount) {
+      return res.status(400).json({ error: "Missing required payment details" });
     }
+
+    // Verify signature
+    const generated_signature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(razorpayOrderId + "|" + razorpayPaymentId)
+      .digest("hex");
+
+    if (generated_signature !== razorpaySignature) {
+      return res.status(400).json({ error: "Payment verification failed" });
+    }
+    sendResponse(res, STATUS.OK, 'Payment verified successfully');
+
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while verifying payment'));
   }

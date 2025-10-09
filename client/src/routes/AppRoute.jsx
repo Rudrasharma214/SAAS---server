@@ -3,8 +3,7 @@ import OpenRoute from './OpenRoute';
 import ProtectedRoute from './ProtectedRoute';
 import SuperAdminDashboard from '../pages/superAdmin/SuperAdminDashboard.jsx';
 import DashboardContent from '../components/superAdmin/DashboardContent';
-import CompaniesList from '../components/superAdmin/CompaniesList';
-import CompanyDetail from '../components/superAdmin/CompanyDetail';
+import CompaniesPage from '../pages/superAdmin/CompaniesPage.jsx';
 import Plan from '../components/superAdmin/Plan';
 import Settings from '../components/superAdmin/Settings';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
@@ -24,7 +23,6 @@ import AdminPlans from '../components/admin/AdminPlans';
 import AdminSettings from '../components/admin/AdminSettings';
 import AdminDashboardContent from '../components/admin/AdminDashboardContent';
 
-
 const AppRoute = () => {
   return (
     <Routes>
@@ -42,17 +40,13 @@ const AppRoute = () => {
       >
         <Route element={<SuperAdminDashboard />}>
           <Route index element={<DashboardContent />} />
-          <Route path="companies" element={<CompaniesList />} />
-          <Route path="companies/:companyId" element={<CompanyDetail />} />
+          <Route path="companies" element={<CompaniesPage />} />
           <Route path="plans" element={<Plan />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Route>
 
-      <Route
-        path="/admin/dashboard"
-        element={<ProtectedRoute allowedRoles={['company_owner']} />}
-      >
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['company_owner']} />}>
         <Route element={<AdminDashboard />}>
           <Route index element={<AdminDashboardContent />} />
           <Route path="managers" element={<Managers />} />
@@ -64,24 +58,15 @@ const AppRoute = () => {
         </Route>
       </Route>
 
-      <Route
-        path="/register-company"
-        element={<ProtectedRoute allowedRoles={['company_owner']} />}
-      >
+      <Route path="/register-company" element={<ProtectedRoute allowedRoles={['company_owner']} />}>
         <Route index element={<CompanyRegister />} />
       </Route>
 
-      <Route
-        path="/manager/dashboard"
-        element={<ProtectedRoute allowedRoles={['manager']} />}
-      >
+      <Route path="/manager/dashboard" element={<ProtectedRoute allowedRoles={['manager']} />}>
         <Route index element={<ManagerDashboard />} />
       </Route>
 
-      <Route
-        path="/user/dashboard"
-        element={<ProtectedRoute allowedRoles={['user']} />}
-      >
+      <Route path="/user/dashboard" element={<ProtectedRoute allowedRoles={['user']} />}>
         <Route index element={<UserDashboard />} />
       </Route>
 

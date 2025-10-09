@@ -19,7 +19,7 @@ const Login = () => {
       user,
       loading,
       userRole: user?.role,
-      isRegistered: user?.isRegistered
+      isRegistered: user?.isRegistered,
     });
 
     if (isAuthenticated && user && !loading) {
@@ -38,8 +38,6 @@ const Login = () => {
       }
     }
   }, [isAuthenticated, user, loading, navigate]);
-
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

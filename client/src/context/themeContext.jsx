@@ -34,9 +34,5 @@ export const ThemeProvider = ({ children }) => {
     toggleTheme,
   };
 
-  return (
-    <ThemeContext.Provider value={theme}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
 };

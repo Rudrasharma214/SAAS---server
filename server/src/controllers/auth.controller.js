@@ -6,12 +6,13 @@ import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import Company from '../models/company.model.js';
 
-export const getCurrentUser = (req, res) => {
+export const getCurrentUser = async (req, res) => {
   try {
     if (!req.user) {
       return sendResponse(res, STATUS.UNAUTHORIZED, 'Unauthorized');
     }
-    sendResponse(res, STATUS.OK, 'Current user fetched successfully', req.user);
+    const user = await User.findById(req.user._id).select('-password').populate({ path: 'companyId', select: 'logoUrl' });
+    sendResponse(res, STATUS.OK, 'Current user fetched successfully', user);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while fetching current user'));
   }
