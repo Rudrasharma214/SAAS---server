@@ -46,7 +46,7 @@ const Navbar = ({ title = 'Dashboard' }) => {
           </div>
 
           {/* Divider */}
-          <div className={`w-px h-8 ${isDarkMode ? 'bg-gray-300' : 'bg-indigo-200/50'}`}></div>
+          <div className={`w-px h-8 ${isDarkMode ? 'bg-gray-400' : 'bg-gray-400'}`}></div>
 
           {/* Page Title */}
           <h1 className={`text-lg font-semibold ${isDarkMode ? 'text-zinc-200' : 'text-gray-900'}`}>

@@ -97,8 +97,8 @@ const AdminDashboard = () => {
         <div
           className={`flex-1 h-full overflow-hidden ${
             isDarkMode
-              ? 'bg-gradient-to-r to-stone-800 from-slate-700 text-zinc-100'
-              : 'bg-gradient-to-r to-indigo-400 from-blue-400 text-white'
+              ? 'bg-gradient-to-r to-stone-800 from-slate-700'
+              : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'
           }`}
         >
           {/* Nested routes will render here */}
