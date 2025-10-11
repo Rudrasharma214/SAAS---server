@@ -4,12 +4,66 @@ import Plan from '../models/plan.model.js';
 import { sendResponse } from '../utils/sendResponse.js';
 import STATUS from '../constant/statusCode.js';
 import AppError from '../utils/AppError.js';
+import cloudinary from 'cloudinary';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export const uploadLogo = async (req, res, next) => {
+  try {
+    const adminId = req.user._id;
+    if (!req.file) return next(new AppError(STATUS.BAD_REQUEST, 'No file uploaded'));
+
+    // Validate file type for faster rejection
+    if (!req.file.mimetype.startsWith('image/')) {
+      return next(new AppError(STATUS.BAD_REQUEST, 'Only image files are allowed'));
+    }
+
+    // Optimize upload with direct buffer upload and compression
+    const uploadPromise = cloudinary.v2.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`,
+      {
+        folder: 'company_logos',
+        // Optimize for faster upload
+        transformation: [
+          { width: 300, height: 300, crop: 'limit', quality: 'auto:good' },
+          { fetch_format: 'auto' }
+        ],
+        // Enable eager transformation for faster delivery
+        eager: [
+          { width: 150, height: 150, crop: 'fill' },
+          { width: 50, height: 50, crop: 'fill' }
+        ],
+        // Upload options for speed
+        resource_type: 'image',
+        format: 'webp', // Smaller file format
+        flags: 'progressive' // Progressive loading
+      }
+    );
+
+    // Just wait for the upload to complete
+    const result = await uploadPromise;
+
+    sendResponse(res, STATUS.OK, 'Logo uploaded successfully', result.secure_url );
+  } catch (error) {
+    console.error('Logo upload error:', error);
+    return next(new AppError(STATUS.INTERNAL_ERROR, 'Logo upload failed'));
+  }
+};
+
 
 export const registerCompany = async (req, res, next) => {
   try {
     const ownerId = req.user._id;
-    const { name, type, address, contactEmail, website, logourl, planId } = req.body;
-
+    const { name, type, address, contactEmail, website, logoUrl, planId } = req.body;
+    console.log("logo " , logoUrl)
     // Check if company with same name exists
     const existingCompany = await Company.findOne({ name });
     if (existingCompany) {
@@ -32,7 +86,7 @@ export const registerCompany = async (req, res, next) => {
       contactEmail,
       website,
       address,
-      logoUrl: logourl,
+      logoUrl: logoUrl,
       subscription: {
         planId: plan._id,
         startDate: currentDate,

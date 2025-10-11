@@ -6,7 +6,8 @@ import Plan from '../models/plan.model.js';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ quiet: true });
+
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -57,7 +58,8 @@ export const createOrder = async (req, res, next) => {
     });
     return sendResponse(res, STATUS.OK, 'Order created successfully', order);
   } catch (error) {
-    next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while creating order'));
+    console.error('Razorpay order creation error:', error); // Log the actual error
+    next(new AppError(STATUS.INTERNAL_ERROR, error.description || 'An error occurred while creating order'));
   }
 };
 

@@ -20,6 +20,24 @@ export const registerCompany = async (companyData) => {
   }
 };
 
+export const uploadLogo = async (logoFile) => {
+  try {
+    const formData = new FormData();
+    formData.append('logo', logoFile);
+
+    const response = await api.post('/admin/upload-logo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+  catch (error) {
+    console.error('Error uploading logo:', error);
+    throw error;
+  }
+}
+
 export const getCompanyDetails = async () => {
   try {
     const response = await api.get('/admin/company-details');
