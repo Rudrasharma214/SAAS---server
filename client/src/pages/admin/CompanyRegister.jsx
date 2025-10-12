@@ -66,25 +66,20 @@ const CompanyRegister = () => {
     if (step === 2) {
       if (!validateStep2()) return;
       
-      // Upload logo in step 2 before moving to step 3
       if (logoFile) {
         try {
           setUploadingLogo(true);
           const uploadResponse = await uploadLogo(logoFile);
-          console.log('Upload response:', uploadResponse); // Debug log
+          console.log('Upload response:', uploadResponse); 
           
-          // Store the uploaded logo URL in separate state
           const logoUrl = uploadResponse.data;
-          // console.log(logoUrl);
           setUploadedLogoUrl(logoUrl);
           
-          // Also update formData for consistency
           setFormData(prevData => ({ 
             ...prevData, 
             logoUrl: logoUrl 
           }));
           
-          // console.log('Updated logoUrl:', logoUrl); // Debug log
         } catch (error) {
           console.error('Logo upload error:', error);
           alert('Failed to upload logo. Please try again.');
@@ -157,7 +152,7 @@ const CompanyRegister = () => {
             const companyData = {
               ...formData,
               planId: selectedPlan._id,
-              logoUrl: uploadedLogoUrl || formData.logoUrl, // Use uploadedLogoUrl first, fallback to formData
+              logoUrl: uploadedLogoUrl || formData.logoUrl, 
             };
             
             console.log('Company registration payload:', companyData);

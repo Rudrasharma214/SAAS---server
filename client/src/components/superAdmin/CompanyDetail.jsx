@@ -145,7 +145,7 @@ const CompanyDetail = ({ companyId, onBack }) => {
           <img
             src={company.logoUrl}
             alt={company.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain p-2"
           />
         ) : (
           <Building2 size={40} className="text-indigo-600" />
@@ -172,13 +172,13 @@ const CompanyDetail = ({ companyId, onBack }) => {
         <span
           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${
             isActive
-              ? 'bg-green-500/20 text-green-100 border border-green-400/40 shadow-lg shadow-green-500/20'
+              ? 'bg-green-400/20 text-green-600 border border-green-400/40 shadow-lg shadow-green-500/20'
               : 'bg-red-500/20 text-red-100 border border-red-400/40'
           }`}
         >
           <div
             className={`w-2 h-2 rounded-full ${
-              isActive ? 'bg-green-300 animate-pulse' : 'bg-red-300'
+              isActive ? 'bg-green-700 animate-pulse' : 'bg-red-300'
             }`}
           ></div>
           {company.subscription?.status || 'Inactive'}

@@ -6,6 +6,9 @@ import { useTheme } from '../context/themeContext';
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
+  const { user }= useAuth();
+
+
   const [expanded, setExpanded] = useState(true);
   const { isDarkMode } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -27,7 +30,7 @@ export default function Sidebar({ children }) {
     <div
       className={`h-screen flex items-center justify-start p-4 ${
         isDarkMode
-          ? 'bg-gradient-to-l to-stone-800 from-slate-700'
+          ? 'bg-gradient-to-l to-stone-800 from-slate-600'
           : 'bg-gradient-to-bl from-slate-100 via-blue-100 to-indigo-100'
       }`}
     >
@@ -46,7 +49,7 @@ export default function Sidebar({ children }) {
           className={`relative h-full flex flex-col overflow-visible 
             ${
               isDarkMode
-                ? 'text-zinc-200 bg-gradient-to-l to-stone-700 from-slate-600'
+                ? 'text-zinc-200 bg-gradient-to-l to-stone-700 from-slate-500'
                 : 'text-gray-800 bg-white/80 backdrop-blur-xl border border-indigo-100/50 shadow-xl shadow-indigo-100/20'
             } 
             rounded-2xl`}
@@ -66,7 +69,7 @@ export default function Sidebar({ children }) {
             </button>
 
             <img
-              src="https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760022122/logoipsum-398_lzskbl.png"
+              src={`${!user.companyId || user.role === 'superadmin' ? 'https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760246574/logoipsum-332_lpbl8d.png' : user.companyId.logoUrl}`}
               alt="Logo"
               className={`overflow-hidden transition-all ${expanded ? 'w-28 ml-2' : 'w-0'}`}
             />

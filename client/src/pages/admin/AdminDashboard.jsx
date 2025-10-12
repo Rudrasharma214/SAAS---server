@@ -97,7 +97,7 @@ const AdminDashboard = () => {
         <div
           className={`flex-1 h-full overflow-hidden ${
             isDarkMode
-              ? 'bg-gradient-to-r to-stone-800 from-slate-700'
+              ? 'bg-gradient-to-r to-stone-800 from-slate-600'
               : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'
           }`}
         >

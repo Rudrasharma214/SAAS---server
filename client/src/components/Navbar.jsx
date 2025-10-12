@@ -5,6 +5,8 @@ import { useTheme } from '../context/themeContext';
 
 const Navbar = ({ title = 'Dashboard' }) => {
   const { user, handleLogout } = useAuth();
+  
+  
   const { toggleTheme, isDarkMode } = useTheme();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
@@ -25,7 +27,7 @@ const Navbar = ({ title = 'Dashboard' }) => {
     <div
       className={`w-full h-16 flex justify-center items-center py-4 relative z-50 ${
         isDarkMode
-          ? 'bg-gradient-to-r to-stone-800 from-slate-700'
+          ? 'bg-gradient-to-r to-stone-800 from-slate-600'
           : 'bg-gradient-to-r from-slate-100 via-blue-100 to-indigo-100 backdrop-blur-xl'
       }`}
     >
@@ -37,13 +39,11 @@ const Navbar = ({ title = 'Dashboard' }) => {
       >
         {/* Left Side - Logo and Title */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center w-auto gap-2">
-            <img
-              src="https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760022122/logoipsum-398_lzskbl.png"
+          <img
+              src={`${!user.companyId || user.role === 'superadmin' ? 'https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760246574/logoipsum-332_lpbl8d.png' : user.companyId.logoUrl}`}
               alt="Logo"
               className="h-8 w-auto"
             />
-          </div>
 
           {/* Divider */}
           <div className={`w-px h-8 ${isDarkMode ? 'bg-gray-400' : 'bg-gray-400'}`}></div>

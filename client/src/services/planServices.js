@@ -39,3 +39,24 @@ export const getAllPlans = async () => {
     throw error;
   }
 };
+
+export const updatePlan = async (planId, planData) => {
+  try {
+    const response = await api.patch(`/plan/updateplan/${planId}`, planData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating plan:', error);
+    throw error;
+  }
+};
+
+
+export const deletePlan = async (planId) => {
+  try {
+    const response = await api.delete(`/plan/deleteplan/${planId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting plan:', error);
+    throw error;
+  } 
+}; 

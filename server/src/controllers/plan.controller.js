@@ -86,3 +86,40 @@ export const verifyPayment = async (req, res, next) => {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while verifying payment'));
   }
 };
+
+export const updatePlan = async (req, res, next) => {
+  try {
+    const { planId } = req.params;
+    const updateData = req.body;
+
+    const updatedPlan = await Plan.findByIdAndUpdate(planId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedPlan) {
+      return sendResponse(res, STATUS.NOT_FOUND, 'Plan not found');
+    }
+
+    return sendResponse(res, STATUS.OK, 'Plan updated successfully', updatedPlan);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while updating the plan'));
+  }
+};
+
+export const deletePlan = async (req, res, next) => {
+  try {
+    const { planId } = req.params;
+
+    const deletedPlan = await Plan.findByIdAndDelete(planId);
+
+    if (!deletedPlan) {
+      return sendResponse(res, STATUS.NOT_FOUND, 'Plan not found');
+    }
+
+    return sendResponse(res, STATUS.OK, 'Plan deleted successfully', deletedPlan);
+  }
+  catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while deleting the plan'));
+  }
+};
