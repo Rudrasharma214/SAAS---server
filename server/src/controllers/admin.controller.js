@@ -8,8 +8,6 @@ import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
-
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -34,36 +32,35 @@ export const uploadLogo = async (req, res, next) => {
         // Optimize for faster upload
         transformation: [
           { width: 300, height: 300, crop: 'limit', quality: 'auto:good' },
-          { fetch_format: 'auto' }
+          { fetch_format: 'auto' },
         ],
         // Enable eager transformation for faster delivery
         eager: [
           { width: 150, height: 150, crop: 'fill' },
-          { width: 50, height: 50, crop: 'fill' }
+          { width: 50, height: 50, crop: 'fill' },
         ],
         // Upload options for speed
         resource_type: 'image',
         format: 'webp', // Smaller file format
-        flags: 'progressive' // Progressive loading
+        flags: 'progressive', // Progressive loading
       }
     );
 
     // Just wait for the upload to complete
     const result = await uploadPromise;
 
-    sendResponse(res, STATUS.OK, 'Logo uploaded successfully', result.secure_url );
+    sendResponse(res, STATUS.OK, 'Logo uploaded successfully', result.secure_url);
   } catch (error) {
     console.error('Logo upload error:', error);
     return next(new AppError(STATUS.INTERNAL_ERROR, 'Logo upload failed'));
   }
 };
 
-
 export const registerCompany = async (req, res, next) => {
   try {
     const ownerId = req.user._id;
     const { name, type, address, contactEmail, website, logoUrl, planId } = req.body;
-    console.log("logo " , logoUrl)
+    console.log('logo ', logoUrl);
     // Check if company with same name exists
     const existingCompany = await Company.findOne({ name });
     if (existingCompany) {
@@ -97,7 +94,9 @@ export const registerCompany = async (req, res, next) => {
       },
     });
 
-    await User.findByIdAndUpdate(ownerId, { $set: { companyId: newCompany._id, isRegistered: true } });
+    await User.findByIdAndUpdate(ownerId, {
+      $set: { companyId: newCompany._id, isRegistered: true },
+    });
     sendResponse(res, STATUS.CREATED, 'Company registered successfully', newCompany);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));
@@ -107,8 +106,8 @@ export const registerCompany = async (req, res, next) => {
 export const getCompanyDetails = async (req, res, next) => {
   try {
     const adminId = req.user._id;
-    const company = await Company.findOne({ owner: adminId })
-      .populate('owner', '-password')
+    const company = await Company.findOne({ ownerId: adminId })
+      .populate('ownerId', '-password')
       .populate('subscription.planId');
 
     if (!company) {
@@ -123,7 +122,7 @@ export const getCompanyDetails = async (req, res, next) => {
 export const getAllManagers = async (req, res, next) => {
   try {
     const adminId = req.user._id;
-    const company = await Company.findOne({ owner: adminId });
+    const company = await Company.findOne({ ownerId: adminId });
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
@@ -139,7 +138,7 @@ export const getAllManagers = async (req, res, next) => {
 export const getAllEmployees = async (req, res, next) => {
   try {
     const adminId = req.user._id;
-    const company = await Company.findOne({ owner: adminId });
+    const company = await Company.findOne({ ownerId: adminId });
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
@@ -154,7 +153,8 @@ export const createManager = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { name, email, password } = req.body;
-    const company = await Company.findOne({ owner: adminId });
+    const company = await Company.findOne({ ownerId: adminId });
+
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
@@ -170,7 +170,9 @@ export const createManager = async (req, res, next) => {
       email,
       password,
       role: 'manager',
+      createdBy: adminId,
       companyId: company._id,
+      isRegistered: true,
     });
     await newManager.save();
     sendResponse(res, STATUS.CREATED, 'Manager created successfully', newManager);
@@ -183,7 +185,7 @@ export const createEmployee = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { name, email, password } = req.body;
-    const company = await Company.findOne({ owner: adminId });
+    const company = await Company.findOne({ ownerId: adminId });
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }

@@ -1,11 +1,11 @@
 import multer from 'multer';
 
 // Optimized multer configuration for faster uploads
-const upload = multer({ 
+const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 2 * 1024 * 1024, // 2MB limit for faster uploads
-    files: 1 // Only allow 1 file
+    files: 1, // Only allow 1 file
   },
   fileFilter: (req, file, cb) => {
     // Fast file type validation
@@ -20,7 +20,7 @@ const upload = multer({
     } else {
       cb(new Error('Only image files are allowed'), false);
     }
-  }
+  },
 });
 
 export default upload;

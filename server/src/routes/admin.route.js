@@ -25,10 +25,8 @@ adminRouter.get('/employees', getAllEmployees);
 adminRouter.delete('/users/:id', deleteUser);
 adminRouter.put('/users/:id', updateUser);
 adminRouter.get('/users/:id', getUserDetails);
-adminRouter.post('/managers', createManager);
-adminRouter.post('/employees', createEmployee);
+adminRouter.post('/createmanagers', createManager);
+adminRouter.post('/createemployees', createEmployee);
 adminRouter.post('/upload-logo', upload.single('logo'), uploadLogo);
-
-
 
 export default adminRouter;

@@ -46,3 +46,23 @@ export const getCompanyDetails = async () => {
     throw error;
   }
 };
+
+export const createManager = async (managerData) => {
+  try {
+    const response = await api.post('/admin/createmanagers', managerData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating manager:', error);
+    throw error;
+  }
+};
+
+export const getAllManagers = async () => {
+  try {
+    const response = await api.get('/admin/managers');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching managers:', error);
+    throw error;
+  }
+};

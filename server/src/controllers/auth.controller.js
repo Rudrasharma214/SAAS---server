@@ -11,7 +11,9 @@ export const getCurrentUser = async (req, res) => {
     if (!req.user) {
       return sendResponse(res, STATUS.UNAUTHORIZED, 'Unauthorized');
     }
-    const user = await User.findById(req.user._id).select('-password').populate({ path: 'companyId', select: 'logoUrl' });
+    const user = await User.findById(req.user._id)
+      .select('-password')
+      .populate({ path: 'companyId', select: 'logoUrl' });
     sendResponse(res, STATUS.OK, 'Current user fetched successfully', user);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while fetching current user'));
@@ -86,7 +88,11 @@ export const login = async (req, res, next) => {
       sameSite: 'lax',
     });
 
-    sendResponse(res, STATUS.OK, 'Login successful', { authToken: token, role: user.role, isRegistered: user.isRegistered });
+    sendResponse(res, STATUS.OK, 'Login successful', {
+      authToken: token,
+      role: user.role,
+      isRegistered: user.isRegistered,
+    });
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while logging in'));
   }

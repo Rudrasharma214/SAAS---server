@@ -47,7 +47,7 @@ export const getCompanyById = async (req, res, next) => {
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
-    
+
     sendResponse(res, STATUS.OK, 'Company fetched successfully', { company });
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while fetching company'));
