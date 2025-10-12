@@ -1,0 +1,83 @@
+import Project from '../models/Project.js';
+import { sendResponse } from '../utils/sendResponse.js';
+import STATUS from '../constant/statusCode.js';
+import AppError from '../utils/AppError.js';
+
+export const createProject = async (req, res, next) => {
+  try {
+    const adminId = req.user._id;
+    const { name, description, companyId, managerId, teamMembers, startDate, endDate } = req.body;
+    if (!adminId) {
+      return sendResponse(res, STATUS.BAD_REQUEST, 'User is not associated with any company');
+    }
+    const newProject = await Project.create({
+      name,
+      description,
+      companyId,
+      adminId,
+      managerId,
+      teamMembers,
+      startDate,
+      endDate,
+      status: 'planned',
+    });
+    sendResponse(res, STATUS.CREATED, 'Project created successfully', newProject);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
+  }
+};
+
+export const getProjects = async (req, res, next) => {
+  try {
+    const adminId = req.user._id;
+    const projects = await Project.find({ adminId })
+      .populate('managerId', 'name email')
+      .populate('teamMembers', 'name email'); // Populate team members with name and email
+    sendResponse(res, STATUS.OK, 'Projects retrieved successfully', projects);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
+  }
+};
+
+export const updateProject = async (req, res, next) => {
+  try {
+    const { projectId } = req.params;
+    const updateData = req.body;
+    const project = await Project.findOneAndUpdate(
+      { _id: projectId, adminId: req.user._id },
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    if (!project) {
+      return sendResponse(
+        res,
+        STATUS.NOT_FOUND,
+        'Project not found or you do not have permission to update it'
+      );
+    }
+    sendResponse(res, STATUS.OK, 'Project updated successfully', project);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
+  }
+};
+
+export const deleteProject = async (req, res, next) => {
+  try {
+    const adminId = req.user._id;
+    const { projectId } = req.params;
+    const project = await Project.findOneAndDelete({ _id: projectId, adminId });
+    if (!project) {
+      return sendResponse(
+        res,
+        STATUS.NOT_FOUND,
+        'Project not found or you do not have permission to delete it'
+      );
+    }
+    sendResponse(res, STATUS.OK, 'Project deleted successfully', project);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
+  }
+};

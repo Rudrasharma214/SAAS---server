@@ -64,9 +64,7 @@ export const deleteCompany = async (req, res, next) => {
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
-    if (admin.role !== 'company_owner') {
-      return sendResponse(res, STATUS.BAD_REQUEST, 'User is not an admin');
-    }
+
     await company.remove();
     sendResponse(res, STATUS.OK, 'Company deleted successfully');
   } catch (error) {

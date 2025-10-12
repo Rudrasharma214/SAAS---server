@@ -179,8 +179,8 @@ const Managers = () => {
                           <button
                             onClick={() => setSelectedManager(manager)}
                             className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                              isDarkMode 
-                                ? 'text-cyan-400 hover:bg-zinc-700 hover:text-cyan-300 border border-cyan-400/20 hover:border-cyan-400/40' 
+                              isDarkMode
+                                ? 'text-cyan-400 hover:bg-zinc-700 hover:text-cyan-300 border border-cyan-400/20 hover:border-cyan-400/40'
                                 : 'text-cyan-600 hover:bg-cyan-50 hover:text-cyan-700 border border-cyan-200 hover:border-cyan-300'
                             }`}
                             title="View Employees"

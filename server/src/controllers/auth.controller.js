@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import Company from '../models/company.model.js';
 
-export const getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res, next) => {
   try {
     if (!req.user) {
       return sendResponse(res, STATUS.UNAUTHORIZED, 'Unauthorized');
@@ -98,7 +98,7 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = (req, res) => {
+export const logout = (req, res, next) => {
   try {
     res.clearCookie('authToken', {
       httpOnly: true,

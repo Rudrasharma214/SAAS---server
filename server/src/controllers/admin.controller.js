@@ -142,7 +142,9 @@ export const getAllEmployees = async (req, res, next) => {
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
-    const employees = await User.find({ companyId: company._id, role: 'user' }).select('-password').populate('managerId', 'name email');
+    const employees = await User.find({ companyId: company._id, role: 'user' })
+      .select('-password')
+      .populate('managerId', 'name email');
     sendResponse(res, STATUS.OK, 'Employees retrieved successfully', employees);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));

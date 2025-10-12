@@ -31,5 +31,4 @@ adminRouter.post('/createemployees', createEmployee);
 adminRouter.post('/upload-logo', upload.single('logo'), uploadLogo);
 adminRouter.get('/managers/:id/users', getUsersByManager);
 
-
 export default adminRouter;
