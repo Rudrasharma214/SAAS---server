@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sun, Moon, User, LogOut } from 'lucide-react';
-import { useAuth } from '../context/authContext';
-import { useTheme } from '../context/themeContext';
+import { useAuth } from '../../context/authContext';
+import { useTheme } from '../../context/themeContext';
 
 const Navbar = ({ title = 'Dashboard' }) => {
   const { user, handleLogout } = useAuth();

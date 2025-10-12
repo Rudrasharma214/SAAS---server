@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
-import SideBar, { SidebarItem } from '../../components/SideBar';
+import Navbar from '../../components/Admin_SupreAdmin/Navbar';
+import SideBar, { SidebarItem } from '../../components/Admin_SupreAdmin/SideBar';
 import { useTheme } from '../../context/themeContext';
 import {
   LayoutDashboard,

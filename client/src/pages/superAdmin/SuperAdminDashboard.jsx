@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/themeContext';
-import Navbar from '../../components/Navbar';
-import SideBar, { SidebarItem } from '../../components/SideBar';
+import Navbar from '../../components/Admin_SupreAdmin/Navbar';
+import SideBar, { SidebarItem } from '../../components/Admin_SupreAdmin/SideBar';
 import { LayoutDashboard, Building, Package, Settings } from 'lucide-react';
 
 const SuperAdminDashboard = () => {

@@ -1,7 +1,7 @@
 import { Sun, Moon, MoreVertical, Menu, X } from 'lucide-react';
 import React, { useContext, createContext, useState, useRef, useEffect } from 'react';
-import { useAuth } from '../context/authContext';
-import { useTheme } from '../context/themeContext';
+import { useAuth } from '../../context/authContext';
+import { useTheme } from '../../context/themeContext';
 
 const SidebarContext = createContext();
 
