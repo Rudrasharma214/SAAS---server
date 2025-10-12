@@ -1,4 +1,4 @@
-import Project from '../models/Project.js';
+import Project from '../models/project.model.js';
 import { sendResponse } from '../utils/sendResponse.js';
 import STATUS from '../constant/statusCode.js';
 import AppError from '../utils/AppError.js';
