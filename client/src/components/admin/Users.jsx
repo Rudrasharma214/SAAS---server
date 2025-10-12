@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/themeContext';
 import { getAllEmployees} from '../../services/adminServices';
 import { UserPlus, Edit, Trash2 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import CreateManagerModal from './CreateManagerModal';
 import CreateUserModal from './CreateUserModal';
 
 const Users = () => {
@@ -24,7 +22,6 @@ const Users = () => {
       setUsers(response.data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
-      // toast.error(error.response?.data?.message || 'Failed to fetch users.');
       setUsers([]);
     } finally {
       setLoading(false);
@@ -76,6 +73,7 @@ const Users = () => {
                     <tr className={isDarkMode ? 'bg-zinc-900/50 border-b border-zinc-700' : 'bg-gray-50 border-b border-gray-200'}>
                       <th className={`px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Name</th>
                       <th className={`px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Email</th>
+                      <th className={`px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Manager</th>
                       <th className={`px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Status</th>
                       <th className={`px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Actions</th>
                     </tr>
@@ -94,6 +92,16 @@ const Users = () => {
                           </div>
                         </td>
                         <td className={`px-6 py-4 whitespace-nowrap ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}>{user.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {user.managerId ? (
+                            <div>
+                              <p className={`font-medium ${isDarkMode ? 'text-zinc-200' : 'text-gray-800'}`}>{user.managerId.name}</p>
+                              <p className={`text-xs ${isDarkMode ? 'text-zinc-500' : 'text-gray-500'}`}>{user.managerId.email}</p>
+                            </div>
+                          ) : (
+                            <span className={`text-xs italic ${isDarkMode ? 'text-zinc-500' : 'text-gray-500'}`}>No Manager</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
                             user.isRegistered

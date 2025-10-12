@@ -142,7 +142,7 @@ export const getAllEmployees = async (req, res, next) => {
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
     }
-    const employees = await User.find({ companyId: company._id, role: 'user' }).select('-password');
+    const employees = await User.find({ companyId: company._id, role: 'user' }).select('-password').populate('managerId', 'name email');
     sendResponse(res, STATUS.OK, 'Employees retrieved successfully', employees);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, error.message));
@@ -184,7 +184,7 @@ export const createManager = async (req, res, next) => {
 export const createEmployee = async (req, res, next) => {
   try {
     const adminId = req.user._id;
-    const { name, email, password } = req.body;
+    const { name, email, password, managerId } = req.body;
     const company = await Company.findOne({ ownerId: adminId });
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
@@ -203,6 +203,7 @@ export const createEmployee = async (req, res, next) => {
       role: 'user',
       createdBy: adminId,
       companyId: company._id,
+      managerId: managerId || null,
       isRegistered: true,
     });
     await newEmployee.save();
