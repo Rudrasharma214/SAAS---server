@@ -201,7 +201,9 @@ export const createEmployee = async (req, res, next) => {
       email,
       password,
       role: 'user',
+      createdBy: adminId,
       companyId: company._id,
+      isRegistered: true,
     });
     await newEmployee.save();
     sendResponse(res, STATUS.CREATED, 'Employee created successfully', newEmployee);
