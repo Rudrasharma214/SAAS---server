@@ -253,3 +253,13 @@ export const getUserDetails = async (req, res, next) => {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while retrieving user details'));
   }
 };
+
+export const getUsersByManager = async (req, res, next) => {
+  try {
+    const managerId = req.params.id;
+    const users = await User.find({ managerId, role: 'user' }).select('-password');
+    sendResponse(res, STATUS.OK, 'Users retrieved successfully', users);
+  } catch (error) {
+    next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while retrieving users'));
+  }
+};

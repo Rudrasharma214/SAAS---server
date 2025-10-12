@@ -10,6 +10,7 @@ import {
   createManager,
   createEmployee,
   uploadLogo,
+  getUsersByManager,
 } from '../controllers/admin.controller.js';
 import { authenticate } from '../middlewares/auth.middleware.js';
 import upload from '../middlewares/multer.middleware.js';
@@ -28,5 +29,7 @@ adminRouter.get('/users/:id', getUserDetails);
 adminRouter.post('/createmanagers', createManager);
 adminRouter.post('/createemployees', createEmployee);
 adminRouter.post('/upload-logo', upload.single('logo'), uploadLogo);
+adminRouter.get('/managers/:id/users', getUsersByManager);
+
 
 export default adminRouter;

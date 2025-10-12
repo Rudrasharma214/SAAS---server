@@ -71,8 +71,7 @@ export const createEmployee = async (employeeData) => {
   try {
     const response = await api.post('/admin/createemployees', employeeData);
     return response.data;
-  } 
-  catch (error) {
+  } catch (error) {
     console.error('Error creating employee:', error);
     throw error;
   }
@@ -84,6 +83,16 @@ export const getAllEmployees = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching employees:', error);
+    throw error;
+  }
+};
+
+export const getUsersByManager = async (managerId) => {
+  try {
+    const response = await api.get(`/admin/managers/${managerId}/users`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users by manager:', error);
     throw error;
   }
 };

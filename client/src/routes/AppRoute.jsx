@@ -26,7 +26,6 @@ import AdminDashboardContent from '../components/admin/AdminDashboardContent';
 import withDeviceCheck from '../components/DeviceCheck/withDeviceCheck.jsx';
 import DeviceNotSupported from '../pages/DeviceNotSupported.jsx';
 
-
 const DeviceCheckedSuperAdminDashboard = withDeviceCheck(SuperAdminDashboard);
 const DeviceCheckedAdminDashboard = withDeviceCheck(AdminDashboard);
 const DeviceCheckedManagerDashboard = withDeviceCheck(ManagerDashboard);

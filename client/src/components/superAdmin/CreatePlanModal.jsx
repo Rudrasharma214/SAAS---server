@@ -8,7 +8,7 @@ const CreatePlanModal = ({
   formData,
   onInputChange,
   submitting,
-  isDarkMode
+  isDarkMode,
 }) => {
   if (!isOpen) return null;
 
@@ -16,15 +16,11 @@ const CreatePlanModal = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
       <div
         className={`w-full max-w-lg rounded-2xl shadow-2xl relative ${
-          isDarkMode
-            ? 'bg-zinc-900 border border-zinc-700'
-            : 'bg-white border border-indigo-100'
+          isDarkMode ? 'bg-zinc-900 border border-zinc-700' : 'bg-white border border-indigo-100'
         }`}
       >
         {/* Modal Header */}
-        <div
-          className={`p-6 border-b ${isDarkMode ? 'border-zinc-700' : 'border-indigo-100'}`}
-        >
+        <div className={`p-6 border-b ${isDarkMode ? 'border-zinc-700' : 'border-indigo-100'}`}>
           <button
             onClick={onClose}
             className={`absolute top-4 right-4 p-2 rounded-lg transition-colors ${
@@ -44,17 +40,10 @@ const CreatePlanModal = ({
                   : 'bg-gradient-to-br from-indigo-50 to-purple-50'
               }`}
             >
-              <Sparkles
-                size={24}
-                className={isDarkMode ? 'text-pink-400' : 'text-indigo-600'}
-              />
+              <Sparkles size={24} className={isDarkMode ? 'text-pink-400' : 'text-indigo-600'} />
             </div>
             <div>
-              <h2
-                className={`text-2xl font-bold ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}
-              >
+              <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 Create New Plan
               </h2>
               <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>
