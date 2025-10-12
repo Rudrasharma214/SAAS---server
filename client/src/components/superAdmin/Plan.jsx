@@ -7,25 +7,25 @@ import { updatePlan, deletePlan, getAllPlans } from '../../services/planServices
 import { useTheme } from '../../context/themeContext';
 import {
   Plus,
-  X,
   Edit,
   Trash2,
   Users,
   UserCheck,
   Calendar,
-  DollarSign,
   Sparkles,
   AlertTriangle,
 } from 'lucide-react';
+import CreatePlanModal from './CreatePlanModal';
+import UpdatePlanModal from './UpdatePlanModal';
 
 const Plan = () => {
   const { isDarkMode } = useTheme();
 
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [editingPlan, setEditingPlan] = useState(null); // State to hold the plan being edited
-  const [deletingPlan, setDeletingPlan] = useState(null); // State for delete confirmation modal
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingPlan, setEditingPlan] = useState(null);
+  const [deletingPlan, setDeletingPlan] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -57,19 +57,23 @@ const Plan = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      price: '',
+      durationInDays: '',
+      maxManagers: '',
+      maxEmployees: '',
+    });
+  };
+
   const handleCreatePlan = async (e) => {
     e.preventDefault();
     try {
       setSubmitting(true);
       await createPlan(formData);
-      setFormData({
-        name: '',
-        price: '',
-        durationInDays: '',
-        maxManagers: '',
-        maxEmployees: '',
-      });
-      setShowForm(false);
+      resetForm();
+      setShowCreateModal(false);
       fetchPlans();
     } catch (err) {
       console.error('Error creating plan:', err);
@@ -96,13 +100,7 @@ const Plan = () => {
     try {
       setSubmitting(true);
       await updatePlan(editingPlan._id, formData);
-      setFormData({
-        name: '',
-        price: '',
-        durationInDays: '',
-        maxManagers: '',
-        maxEmployees: '',
-      });
+      resetForm();
       setEditingPlan(null);
       fetchPlans();
     } catch (err) {
@@ -119,7 +117,7 @@ const Plan = () => {
       setSubmitting(true);
       await deletePlan(deletingPlan._id);
       setDeletingPlan(null);
-      fetchPlans(); // Refresh the list
+      fetchPlans();
     } catch (err) {
       console.error('Error deleting plan:', err);
     } finally {
@@ -141,7 +139,7 @@ const Plan = () => {
             </p>
           </div>
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => setShowCreateModal(true)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 ${
               isDarkMode
                 ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white hover:shadow-pink-500/30'
@@ -186,7 +184,7 @@ const Plan = () => {
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {plans.map((plan, index) => (
+            {plans.map((plan) => (
               <div
                 key={plan._id}
                 className={`group relative rounded-2xl p-6 border transition-all duration-300 hover:scale-105 ${
@@ -335,403 +333,27 @@ const Plan = () => {
         )}
 
         {/* Create Plan Modal */}
-        {showForm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
-            <div
-              className={`w-full max-w-lg rounded-2xl shadow-2xl relative ${
-                isDarkMode
-                  ? 'bg-zinc-900 border border-zinc-700'
-                  : 'bg-white border border-indigo-100'
-              }`}
-            >
-              {/* Modal Header */}
-              <div
-                className={`p-6 border-b ${isDarkMode ? 'border-zinc-700' : 'border-indigo-100'}`}
-              >
-                <button
-                  onClick={() => setShowForm(false)}
-                  className={`absolute top-4 right-4 p-2 rounded-lg transition-colors ${
-                    isDarkMode
-                      ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
-                      : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  <X size={20} />
-                </button>
+        <CreatePlanModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreatePlan}
+          formData={formData}
+          onInputChange={handleInputChange}
+          submitting={submitting}
+          isDarkMode={isDarkMode}
+        />
 
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`p-3 rounded-xl ${
-                      isDarkMode
-                        ? 'bg-gradient-to-br from-pink-500/10 to-purple-500/10'
-                        : 'bg-gradient-to-br from-indigo-50 to-purple-50'
-                    }`}
-                  >
-                    <Sparkles
-                      size={24}
-                      className={isDarkMode ? 'text-pink-400' : 'text-indigo-600'}
-                    />
-                  </div>
-                  <div>
-                    <h2
-                      className={`text-2xl font-bold ${
-                        isDarkMode ? 'text-white' : 'text-gray-900'
-                      }`}
-                    >
-                      Create New Plan
-                    </h2>
-                    <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>
-                      Set up a new subscription plan
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal Body */}
-              <form onSubmit={handleCreatePlan} className="p-6 space-y-4">
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-2 ${
-                      isDarkMode ? 'text-zinc-300' : 'text-gray-700'
-                    }`}
-                  >
-                    Plan Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Premium, Enterprise"
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                      isDarkMode
-                        ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                        : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                    }`}
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${
-                        isDarkMode ? 'text-zinc-300' : 'text-gray-700'
-                      }`}
-                    >
-                      Price (₹)
-                    </label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      placeholder="999"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${
-                        isDarkMode ? 'text-zinc-300' : 'text-gray-700'
-                      }`}
-                    >
-                      Duration (days)
-                    </label>
-                    <input
-                      type="number"
-                      name="durationInDays"
-                      value={formData.durationInDays}
-                      onChange={handleInputChange}
-                      placeholder="30"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${
-                        isDarkMode ? 'text-zinc-300' : 'text-gray-700'
-                      }`}
-                    >
-                      Max Managers
-                    </label>
-                    <input
-                      type="number"
-                      name="maxManagers"
-                      value={formData.maxManagers}
-                      onChange={handleInputChange}
-                      placeholder="5"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${
-                        isDarkMode ? 'text-zinc-300' : 'text-gray-700'
-                      }`}
-                    >
-                      Max Employees
-                    </label>
-                    <input
-                      type="number"
-                      name="maxEmployees"
-                      value={formData.maxEmployees}
-                      onChange={handleInputChange}
-                      placeholder="50"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Modal Footer */}
-                <div
-                  className={`flex gap-3 pt-4 border-t ${
-                    isDarkMode ? 'border-zinc-700' : 'border-indigo-100'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className={`flex-1 px-6 py-2.5 rounded-lg font-semibold transition-all ${
-                      isDarkMode
-                        ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className={`flex-1 px-6 py-2.5 rounded-lg font-semibold shadow-lg transition-all ${
-                      isDarkMode
-                        ? 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white disabled:opacity-50'
-                        : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white disabled:opacity-50 shadow-indigo-200/50'
-                    }`}
-                  >
-                    {submitting ? 'Creating...' : 'Create Plan'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Edit Plan Modal */}
-        {editingPlan && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-4">
-            <div
-              className={`w-full max-w-lg rounded-2xl shadow-2xl relative ${
-                isDarkMode
-                  ? 'bg-zinc-900 border border-zinc-700'
-                  : 'bg-white border border-indigo-100'
-              }`}
-            >
-              {/* Modal Header */}
-              <div
-                className={`p-6 border-b ${isDarkMode ? 'border-zinc-700' : 'border-indigo-100'}`}
-              >
-                <button
-                  onClick={() => setEditingPlan(null)}
-                  className={`absolute top-4 right-4 p-2 rounded-lg transition-colors ${
-                    isDarkMode
-                      ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
-                      : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  <X size={20} />
-                </button>
-
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`p-3 rounded-xl ${
-                      isDarkMode
-                        ? 'bg-gradient-to-br from-pink-500/10 to-purple-500/10'
-                        : 'bg-gradient-to-br from-indigo-50 to-purple-50'
-                    }`}
-                  >
-                    <Edit size={24} className={isDarkMode ? 'text-pink-400' : 'text-indigo-600'} />
-                  </div>
-                  <div>
-                    <h2
-                      className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                    >
-                      Edit Plan
-                    </h2>
-                    <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>
-                      Update the details for "{editingPlan.name}"
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal Body */}
-              <form onSubmit={handleUpdatePlan} className="p-6 space-y-4">
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}
-                  >
-                    Plan Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Premium, Enterprise"
-                    className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                      isDarkMode
-                        ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                        : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                    }`}
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}
-                    >
-                      Price (₹)
-                    </label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      placeholder="999"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}
-                    >
-                      Duration (days)
-                    </label>
-                    <input
-                      type="number"
-                      name="durationInDays"
-                      value={formData.durationInDays}
-                      onChange={handleInputChange}
-                      placeholder="30"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}
-                    >
-                      Max Managers
-                    </label>
-                    <input
-                      type="number"
-                      name="maxManagers"
-                      value={formData.maxManagers}
-                      onChange={handleInputChange}
-                      placeholder="5"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-zinc-300' : 'text-gray-700'}`}
-                    >
-                      Max Employees
-                    </label>
-                    <input
-                      type="number"
-                      name="maxEmployees"
-                      value={formData.maxEmployees}
-                      onChange={handleInputChange}
-                      placeholder="50"
-                      className={`w-full px-4 py-2.5 rounded-lg border transition-all focus:outline-none focus:ring-2 ${
-                        isDarkMode
-                          ? 'bg-zinc-800 text-zinc-100 border-zinc-700 focus:ring-pink-500 focus:border-pink-500'
-                          : 'bg-white text-gray-900 border-indigo-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      }`}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Modal Footer */}
-                <div
-                  className={`flex gap-3 pt-4 border-t ${isDarkMode ? 'border-zinc-700' : 'border-indigo-100'}`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setEditingPlan(null)}
-                    className={`flex-1 px-6 py-2.5 rounded-lg font-semibold transition-all ${
-                      isDarkMode
-                        ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className={`flex-1 px-6 py-2.5 rounded-lg font-semibold shadow-lg transition-all ${
-                      isDarkMode
-                        ? 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white disabled:opacity-50'
-                        : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white disabled:opacity-50 shadow-indigo-200/50'
-                    }`}
-                  >
-                    {submitting ? 'Updating...' : 'Update Plan'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        {/* Update Plan Modal */}
+        <UpdatePlanModal
+          isOpen={!!editingPlan}
+          onClose={() => setEditingPlan(null)}
+          onSubmit={handleUpdatePlan}
+          formData={formData}
+          onInputChange={handleInputChange}
+          submitting={submitting}
+          planName={editingPlan?.name || ''}
+          isDarkMode={isDarkMode}
+        />
 
         {/* Delete Confirmation Modal */}
         {deletingPlan && (
