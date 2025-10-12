@@ -97,13 +97,11 @@ const Login = () => {
         <div className="bg-gradient-to-bl from-slate-100 via-blue-100 to-indigo-100 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/50">
           {/* Icon */}
           <div className="flex justify-center mb-6">
-            
-              <img
+            <img
               src="https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760022122/logoipsum-398_lzskbl.png"
               alt="Logo"
               className={`overflow-hidden h-8 w-38 transition-all`}
             />
-
           </div>
 
           {/* Title */}

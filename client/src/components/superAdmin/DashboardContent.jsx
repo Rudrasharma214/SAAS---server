@@ -226,8 +226,8 @@ const DashboardContent = () => {
                           ? 'bg-green-500/10 text-green-400'
                           : 'bg-green-50 text-green-600'
                         : isDarkMode
-                        ? 'bg-red-500/10 text-red-400'
-                        : 'bg-red-50 text-red-600'
+                          ? 'bg-red-500/10 text-red-400'
+                          : 'bg-red-50 text-red-600'
                     }`}
                   >
                     {stat.trend === 'up' ? (
@@ -242,7 +242,9 @@ const DashboardContent = () => {
                   <p className={`text-sm mb-1 ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>
                     {stat.title}
                   </p>
-                  <p className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <p
+                    className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                  >
                     {stat.value}
                   </p>
                 </div>
@@ -271,13 +273,19 @@ const DashboardContent = () => {
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <div className={`w-3 h-3 rounded-full ${colorClasses.bg} ${colorClasses.border} border-2`}></div>
-                        <span className={`font-medium ${isDarkMode ? 'text-zinc-200' : 'text-gray-800'}`}>
+                        <div
+                          className={`w-3 h-3 rounded-full ${colorClasses.bg} ${colorClasses.border} border-2`}
+                        ></div>
+                        <span
+                          className={`font-medium ${isDarkMode ? 'text-zinc-200' : 'text-gray-800'}`}
+                        >
                           {plan.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}>
+                        <span
+                          className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-gray-600'}`}
+                        >
                           {plan.count} companies
                         </span>
                         <span className={`text-sm font-semibold ${colorClasses.text}`}>
@@ -285,9 +293,11 @@ const DashboardContent = () => {
                         </span>
                       </div>
                     </div>
-                    <div className={`w-full h-2 rounded-full overflow-hidden ${
-                      isDarkMode ? 'bg-zinc-700' : 'bg-gray-200'
-                    }`}>
+                    <div
+                      className={`w-full h-2 rounded-full overflow-hidden ${
+                        isDarkMode ? 'bg-zinc-700' : 'bg-gray-200'
+                      }`}
+                    >
                       <div
                         className={`h-full rounded-full ${colorClasses.bg} ${colorClasses.border} border-r-2 transition-all duration-500`}
                         style={{ width: `${plan.percentage}%` }}
@@ -320,13 +330,19 @@ const DashboardContent = () => {
                       <Icon size={16} className={colorClasses.text} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-zinc-200' : 'text-gray-800'}`}>
+                      <p
+                        className={`text-sm font-medium mb-1 ${isDarkMode ? 'text-zinc-200' : 'text-gray-800'}`}
+                      >
                         {activity.message}
                       </p>
-                      <p className={`text-xs ${isDarkMode ? 'text-zinc-500' : 'text-gray-500'} truncate`}>
+                      <p
+                        className={`text-xs ${isDarkMode ? 'text-zinc-500' : 'text-gray-500'} truncate`}
+                      >
                         {activity.company}
                       </p>
-                      <p className={`text-xs mt-1 ${isDarkMode ? 'text-zinc-600' : 'text-gray-400'}`}>
+                      <p
+                        className={`text-xs mt-1 ${isDarkMode ? 'text-zinc-600' : 'text-gray-400'}`}
+                      >
                         {activity.time}
                       </p>
                     </div>
@@ -397,7 +413,9 @@ const DashboardContent = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className={isDarkMode ? 'divide-y divide-zinc-700/50' : 'divide-y divide-indigo-50'}>
+              <tbody
+                className={isDarkMode ? 'divide-y divide-zinc-700/50' : 'divide-y divide-indigo-50'}
+              >
                 {recentCompanies.map((company, index) => (
                   <tr
                     key={company.id}
@@ -405,8 +423,8 @@ const DashboardContent = () => {
                       isDarkMode
                         ? 'hover:bg-zinc-700/30'
                         : index % 2 === 0
-                        ? 'bg-white hover:bg-indigo-50/50'
-                        : 'bg-slate-50/50 hover:bg-indigo-50/50'
+                          ? 'bg-white hover:bg-indigo-50/50'
+                          : 'bg-slate-50/50 hover:bg-indigo-50/50'
                     }`}
                   >
                     <td className="px-6 py-4">
@@ -420,7 +438,9 @@ const DashboardContent = () => {
                         >
                           {company.name.charAt(0)}
                         </div>
-                        <span className={`font-semibold ${isDarkMode ? 'text-zinc-100' : 'text-gray-900'}`}>
+                        <span
+                          className={`font-semibold ${isDarkMode ? 'text-zinc-100' : 'text-gray-900'}`}
+                        >
                           {company.name}
                         </span>
                       </div>
@@ -436,12 +456,12 @@ const DashboardContent = () => {
                               ? 'bg-pink-500/10 text-pink-400 border border-pink-500/20'
                               : 'bg-pink-50 text-pink-700 border border-pink-200'
                             : company.plan === 'Premium'
-                            ? isDarkMode
-                              ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                              : 'bg-purple-50 text-purple-700 border border-purple-200'
-                            : isDarkMode
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                            : 'bg-blue-50 text-blue-700 border border-blue-200'
+                              ? isDarkMode
+                                ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                                : 'bg-purple-50 text-purple-700 border border-purple-200'
+                              : isDarkMode
+                                ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                : 'bg-blue-50 text-blue-700 border border-blue-200'
                         }`}
                       >
                         {company.plan}
@@ -455,8 +475,8 @@ const DashboardContent = () => {
                               ? 'bg-green-500/10 text-green-400 border border-green-500/20'
                               : 'bg-green-50 text-green-700 border border-green-200'
                             : isDarkMode
-                            ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
-                            : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                              ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                              : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                         }`}
                       >
                         <div
@@ -466,8 +486,8 @@ const DashboardContent = () => {
                                 ? 'bg-green-400'
                                 : 'bg-green-500'
                               : isDarkMode
-                              ? 'bg-yellow-400'
-                              : 'bg-yellow-500'
+                                ? 'bg-yellow-400'
+                                : 'bg-yellow-500'
                           }`}
                         ></div>
                         {company.status}

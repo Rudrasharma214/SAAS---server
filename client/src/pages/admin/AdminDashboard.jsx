@@ -27,11 +27,9 @@ const AdminDashboard = () => {
         ? 'projects'
         : path.includes('attendance')
           ? 'attendance'
-          : path.includes('plans')
-            ? 'plans'
-            : path.includes('settings')
-              ? 'settings'
-              : 'dashboard';
+          : path.includes('settings')
+            ? 'settings'
+            : 'dashboard';
 
   const sectionTitles = {
     dashboard: 'Dashboard',
@@ -39,7 +37,6 @@ const AdminDashboard = () => {
     users: 'Users',
     projects: 'Projects',
     attendance: 'Attendance',
-    plans: 'Plans',
     settings: 'Settings',
   };
 
@@ -76,12 +73,6 @@ const AdminDashboard = () => {
           text="Attendance"
           active={activeSection === 'attendance'}
           onClick={() => navigate('/admin/dashboard/attendance')}
-        />
-        <SidebarItem
-          icon={<Package size={20} />}
-          text="Plans"
-          active={activeSection === 'plans'}
-          onClick={() => navigate('/admin/dashboard/plans')}
         />
         <SidebarItem
           icon={<Settings size={20} />}

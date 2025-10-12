@@ -6,8 +6,7 @@ import { useTheme } from '../context/themeContext';
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
-  const { user }= useAuth();
-
+  const { user } = useAuth();
 
   const [expanded, setExpanded] = useState(true);
   const { isDarkMode } = useTheme();

@@ -65,21 +65,20 @@ const CompanyRegister = () => {
   const handleNext = async () => {
     if (step === 2) {
       if (!validateStep2()) return;
-      
+
       if (logoFile) {
         try {
           setUploadingLogo(true);
           const uploadResponse = await uploadLogo(logoFile);
-          console.log('Upload response:', uploadResponse); 
-          
+          console.log('Upload response:', uploadResponse);
+
           const logoUrl = uploadResponse.data;
           setUploadedLogoUrl(logoUrl);
-          
-          setFormData(prevData => ({ 
-            ...prevData, 
-            logoUrl: logoUrl 
+
+          setFormData((prevData) => ({
+            ...prevData,
+            logoUrl: logoUrl,
           }));
-          
         } catch (error) {
           console.error('Logo upload error:', error);
           alert('Failed to upload logo. Please try again.');
@@ -148,13 +147,13 @@ const CompanyRegister = () => {
               amount: selectedPlan.price,
             };
             await verifyPayment(paymentData);
-            
+
             const companyData = {
               ...formData,
               planId: selectedPlan._id,
-              logoUrl: uploadedLogoUrl || formData.logoUrl, 
+              logoUrl: uploadedLogoUrl || formData.logoUrl,
             };
-            
+
             console.log('Company registration payload:', companyData);
             console.log('uploadedLogoUrl:', uploadedLogoUrl);
             console.log('formData.logoUrl:', formData.logoUrl);
@@ -207,8 +206,8 @@ const CompanyRegister = () => {
                   isCompleted
                     ? 'bg-green-500 text-white'
                     : isActive
-                    ? 'bg-indigo-500 text-white'
-                    : 'bg-white border-2 border-gray-300 text-gray-400'
+                      ? 'bg-indigo-500 text-white'
+                      : 'bg-white border-2 border-gray-300 text-gray-400'
                 }`}
               >
                 {isCompleted ? <Check size={18} /> : <Icon size={18} />}
@@ -227,7 +226,16 @@ const CompanyRegister = () => {
     </div>
   );
 
-  const InputField = ({ icon: Icon, label, name, type = 'text', placeholder, value, error, required = true }) => (
+  const InputField = ({
+    icon: Icon,
+    label,
+    name,
+    type = 'text',
+    placeholder,
+    value,
+    error,
+    required = true,
+  }) => (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1.5">
         {label} {!required && <span className="text-gray-400 text-xs">(Optional)</span>}
@@ -243,9 +251,7 @@ const CompanyRegister = () => {
           value={value}
           onChange={handleFormChange}
           className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition text-sm ${
-            error
-              ? 'border-red-300 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-indigo-500'
+            error ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'
           }`}
         />
       </div>
@@ -318,7 +324,9 @@ const CompanyRegister = () => {
               <div className="inline-flex p-3 bg-indigo-100 rounded-full mb-3">
                 <Shield size={32} className="text-indigo-600" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">Terms & Conditions</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">
+                Terms & Conditions
+              </h2>
               <p className="text-sm text-gray-600">Review and accept our terms to continue</p>
             </div>
 
@@ -326,22 +334,28 @@ const CompanyRegister = () => {
               <h3 className="font-semibold text-gray-900 mb-3 text-sm">Platform Usage Agreement</h3>
               <div className="space-y-2.5 text-xs text-gray-700 leading-relaxed">
                 <p>
-                  <strong>1. Acceptance:</strong> By registering, you agree to comply with all terms outlined here.
+                  <strong>1. Acceptance:</strong> By registering, you agree to comply with all terms
+                  outlined here.
                 </p>
                 <p>
-                  <strong>2. Billing:</strong> You agree to pay all fees for your chosen plan through our secure gateway.
+                  <strong>2. Billing:</strong> You agree to pay all fees for your chosen plan
+                  through our secure gateway.
                 </p>
                 <p>
-                  <strong>3. Privacy:</strong> Your data is stored securely and never shared without consent.
+                  <strong>3. Privacy:</strong> Your data is stored securely and never shared without
+                  consent.
                 </p>
                 <p>
-                  <strong>4. Service:</strong> We strive for 99.9% uptime but cannot guarantee uninterrupted service.
+                  <strong>4. Service:</strong> We strive for 99.9% uptime but cannot guarantee
+                  uninterrupted service.
                 </p>
                 <p>
-                  <strong>5. Responsibilities:</strong> You're responsible for account security and all activities.
+                  <strong>5. Responsibilities:</strong> You're responsible for account security and
+                  all activities.
                 </p>
                 <p>
-                  <strong>6. Cancellation:</strong> You may cancel anytime. No refunds for partial periods.
+                  <strong>6. Cancellation:</strong> You may cancel anytime. No refunds for partial
+                  periods.
                 </p>
               </div>
             </div>
@@ -354,7 +368,8 @@ const CompanyRegister = () => {
                 className="mt-0.5 form-checkbox h-4 w-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <span className="text-sm text-gray-700">
-                I agree to the <span className="font-semibold text-indigo-600">Terms & Conditions</span> and{' '}
+                I agree to the{' '}
+                <span className="font-semibold text-indigo-600">Terms & Conditions</span> and{' '}
                 <span className="font-semibold text-indigo-600">Privacy Policy</span>
               </span>
             </label>
@@ -383,7 +398,9 @@ const CompanyRegister = () => {
               <div className="inline-flex p-3 bg-indigo-100 rounded-full mb-3">
                 <Building2 size={32} className="text-indigo-600" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">Company Information</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">
+                Company Information
+              </h2>
               <p className="text-sm text-gray-600">Tell us about your company</p>
             </div>
 
@@ -474,7 +491,9 @@ const CompanyRegister = () => {
               <div className="inline-flex p-3 bg-indigo-100 rounded-full mb-3">
                 <CreditCard size={32} className="text-indigo-600" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">Choose Your Plan</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-900">
+                Choose Your Plan
+              </h2>
               <p className="text-sm text-gray-600">Select the perfect plan for your business</p>
             </div>
 

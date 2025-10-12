@@ -50,7 +50,6 @@ export const updatePlan = async (planId, planData) => {
   }
 };
 
-
 export const deletePlan = async (planId) => {
   try {
     const response = await api.delete(`/plan/deleteplan/${planId}`);
@@ -58,5 +57,5 @@ export const deletePlan = async (planId) => {
   } catch (error) {
     console.error('Error deleting plan:', error);
     throw error;
-  } 
-}; 
+  }
+};

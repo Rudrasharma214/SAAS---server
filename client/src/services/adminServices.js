@@ -31,12 +31,11 @@ export const uploadLogo = async (logoFile) => {
       },
     });
     return response.data;
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Error uploading logo:', error);
     throw error;
   }
-}
+};
 
 export const getCompanyDetails = async () => {
   try {
