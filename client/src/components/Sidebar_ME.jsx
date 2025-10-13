@@ -29,7 +29,7 @@ export default function Sidebar_ME({ children }) {
     <div
       className={`h-screen flex items-center justify-start ${
         isDarkMode
-          ? 'bg-gradient-to-l to-stone-800 from-slate-600'
+          ? 'bg-slate-600'
           : 'bg-gradient-to-bl from-slate-100 via-blue-100 to-indigo-100'
       }`}
     >

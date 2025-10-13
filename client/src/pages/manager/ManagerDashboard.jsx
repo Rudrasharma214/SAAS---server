@@ -1,71 +1,64 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import Sidebar_ME from '../../components/Sidebar_ME';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/themeContext';
-import {
-  LayoutDashboard,
-  Search,
-  Users,
-  CheckSquare,
-  User,
-  Bell,
-  FolderKanban,
-} from 'lucide-react';
+import Sidebar_ME, { Sidebar_MEItem } from '../../components/Sidebar_ME.jsx';
+import { LayoutDashboard, Building, Package, Settings } from 'lucide-react';
 
 const ManagerDashboard = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState('dashboards');
+  const location = useLocation();
 
-  const handleSidebarItemClick = (itemId) => {
-    setActiveSection(itemId);
-    // You can expand this to navigate to different routes
-    // For now, it just updates the active state
-    switch (itemId) {
-      case 'dashboard':
-        navigate('/manager/dashboard');
-        break;
-      case 'projects':
-        navigate('/manager/dashboard/projects');
-        break;
-      case 'employees':
-        navigate('/manager/dashboard/employees');
-        break;
-      default:
-        navigate('/manager/dashboard');
-    }
-  };
+  // Determine active section based on URL
+  const path = location.pathname;
+  const activeSection = path.includes('attendance')
+    ? 'attendance'
+    : path.includes('projects')
+      ? 'projects'
+      : 'dashboard';
 
-  const managerMenuItems = [
-    {
-      items: [
-        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { id: 'search', label: 'Search', icon: Search },
-      ],
-    },
-    {
-      title: 'Management',
-      items: [
-        { id: 'projects', label: 'Projects', icon: FolderKanban },
-        { id: 'employees', label: 'My Team', icon: Users },
-      ],
-    },
-    {
-      title: 'Personal',
-      items: [
-        { id: 'tasks', label: 'My Tasks', icon: CheckSquare },
-        { id: 'profile', label: 'Profile', icon: User },
-        { id: 'notifications', label: 'Notifications', icon: Bell, notificationCount: 1 },
-      ],
-    },
-  ];
 
   return (
-    <div className={`flex h-screen p-4 gap-4 ${isDarkMode ? 'bg-gradient-to-r to-stone-800 from-slate-600' : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'}`}>
-      <Sidebar_ME activeItem={activeSection} onItemClick={handleSidebarItemClick} menuSections={managerMenuItems} />
-      <div className="flex-1 h-screen overflow-hidden">
-        {/* Nested routes will render here */}
-        <Outlet />
+    <div
+      className={`flex h-screen ${
+        isDarkMode
+          ? 'bg-gradient-to-r to-stone-800 from-slate-600'
+          : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'
+      }`}
+    >
+      {/* Sidebar */}
+      <Sidebar_ME>
+        <Sidebar_MEItem
+          icon={<LayoutDashboard size={20} />}
+          text="Dashboard"
+          active={activeSection === 'dashboard'}
+          onClick={() => navigate('/manager/dashboard')}
+        />
+        <Sidebar_MEItem
+          icon={<Building size={20} />}
+          text="Attendance"
+          active={activeSection === 'attendance'}
+          onClick={() => navigate('/manager/dashboard/attendance')}
+        />
+        <Sidebar_MEItem
+          icon={<Package size={20} />}
+          text="Projects"
+          active={activeSection === 'projects'}
+          onClick={() => navigate('/manager/dashboard/projects')}
+        />
+      </Sidebar_ME>
+
+      {/* Main Area */}
+      <div className="flex flex-col flex-1 h-screen overflow-hidden">
+        <div
+          className={`flex-1 overflow-y-auto ${
+            isDarkMode
+              ? 'bg-gradient-to-r to-stone-800 from-slate-600'
+              : 'bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-100'
+          }`}
+        >
+          {/* Nested Routes Render Here */}
+          <Outlet />
+        </div>
       </div>
     </div>
   );

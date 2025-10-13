@@ -1,20 +1,21 @@
 import { Route, Routes } from 'react-router-dom';
 import OpenRoute from './OpenRoute';
 import ProtectedRoute from './ProtectedRoute';
+import withDeviceCheck from '../components/DeviceCheck/withDeviceCheck.jsx';
+import DeviceNotSupported from '../pages/DeviceNotSupported.jsx';
+import Login from '../pages/auth/Login.jsx';
+import Register from '../pages/auth/Register.jsx';
+import Unauthorized from '../pages/auth/Unauthorized.jsx';
+
+//super admin section components
 import SuperAdminDashboard from '../pages/superAdmin/SuperAdminDashboard.jsx';
 import DashboardContent from '../components/superAdmin/DashboardContent';
 import CompaniesPage from '../pages/superAdmin/CompaniesPage.jsx';
 import Plan from '../components/superAdmin/Plan';
 import Settings from '../components/superAdmin/Settings';
-import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
-import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
-import UserDashboard from '../pages/user/UserDashboard.jsx';
-import Login from '../pages/auth/Login.jsx';
-import Register from '../pages/auth/Register.jsx';
-import Unauthorized from '../pages/auth/Unauthorized.jsx';
-import CompanyRegister from '../pages/admin/CompanyRegister.jsx';
 
 // Admin section components
+import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import Managers from '../components/admin/Managers';
 import Users from '../components/admin/Users';
 import Projects from '../components/admin/Projects';
@@ -22,9 +23,16 @@ import Attendance from '../components/admin/Attendance';
 import AdminPlans from '../components/admin/AdminPlans';
 import AdminSettings from '../components/admin/AdminSettings';
 import AdminDashboardContent from '../components/admin/AdminDashboardContent';
+import CompanyRegister from '../pages/admin/CompanyRegister.jsx';
 
-import withDeviceCheck from '../components/DeviceCheck/withDeviceCheck.jsx';
-import DeviceNotSupported from '../pages/DeviceNotSupported.jsx';
+// manager section components
+import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
+import ManagerDashboardContent from '../components/manager/ManagerDashboardContent';
+import ManagerAttandance from '../components/manager/ManagerAttandance.jsx';
+import ManagerProjects from '../components/manager/ManagerProjects.jsx';
+
+// user section components
+import UserDashboard from '../pages/user/UserDashboard.jsx';
 import UserDashboardContent from '../components/user/UserDashboardContent.jsx';
 import Attandance from '../components/user/Attandance.jsx';
 import UserProjects from '../components/user/UserProjects.jsx';
@@ -71,7 +79,11 @@ const AppRoute = () => {
       </Route>
 
       <Route path="/manager/dashboard" element={<ProtectedRoute allowedRoles={['manager']} />}>
-        <Route index element={<DeviceCheckedManagerDashboard />} />
+        <Route element={<DeviceCheckedManagerDashboard />}>
+          <Route index element={<ManagerDashboardContent />} />
+          <Route path="attendance" element={<ManagerAttandance />} />
+          <Route path="projects" element={<ManagerProjects />} />
+        </Route>
       </Route>
 
       <Route path="/user/dashboard" element={<ProtectedRoute allowedRoles={['user']} />}>
