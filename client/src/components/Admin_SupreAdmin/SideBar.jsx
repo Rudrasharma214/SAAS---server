@@ -70,7 +70,7 @@ export default function Sidebar({ children }) {
             <img
               src={`${!user.companyId || user.role === 'superadmin' ? 'https://res.cloudinary.com/dqqnqq7xh/image/upload/v1760246574/logoipsum-332_lpbl8d.png' : user.companyId.logoUrl}`}
               alt="Logo"
-              className={`overflow-hidden transition-all ${expanded ? 'w-28 ml-2' : 'w-0'}`}
+              className={`overflow-hidden transition-all ${expanded ? 'w-38 ml-4' : 'w-0'}`}
             />
           </div>
 

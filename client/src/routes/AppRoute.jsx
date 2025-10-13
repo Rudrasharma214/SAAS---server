@@ -25,6 +25,9 @@ import AdminDashboardContent from '../components/admin/AdminDashboardContent';
 
 import withDeviceCheck from '../components/DeviceCheck/withDeviceCheck.jsx';
 import DeviceNotSupported from '../pages/DeviceNotSupported.jsx';
+import UserDashboardContent from '../components/user/UserDashboardContent.jsx';
+import Attandance from '../components/user/Attandance.jsx';
+import UserProjects from '../components/user/UserProjects.jsx';
 
 const DeviceCheckedSuperAdminDashboard = withDeviceCheck(SuperAdminDashboard);
 const DeviceCheckedAdminDashboard = withDeviceCheck(AdminDashboard);
@@ -42,10 +45,7 @@ const AppRoute = () => {
         <Route index element={<Register />} />
       </Route>
 
-      <Route
-        path="/superadmin/dashboard"
-        element={<ProtectedRoute allowedRoles={['super_admin']} />}
-      >
+      <Route path="/superadmin/dashboard" element={<ProtectedRoute allowedRoles={['super_admin']} />}>
         <Route element={<DeviceCheckedSuperAdminDashboard />}>
           <Route index element={<DashboardContent />} />
           <Route path="companies" element={<CompaniesPage />} />
@@ -75,7 +75,11 @@ const AppRoute = () => {
       </Route>
 
       <Route path="/user/dashboard" element={<ProtectedRoute allowedRoles={['user']} />}>
-        <Route index element={<DeviceCheckedUserDashboard />} />
+        <Route element={<DeviceCheckedUserDashboard />}>
+          <Route index element={<UserDashboardContent />} />
+          <Route path="attendance" element={<Attandance />} />
+          <Route path="projects" element={<UserProjects />} />
+        </Route>
       </Route>
 
       <Route path="/unauthorized" element={<Unauthorized />} />

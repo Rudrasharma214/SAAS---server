@@ -2,11 +2,16 @@ import Project from '../models/project.model.js';
 import { sendResponse } from '../utils/sendResponse.js';
 import STATUS from '../constant/statusCode.js';
 import AppError from '../utils/AppError.js';
-
+import User from '../models/user.model.js';
+ 
 export const createProject = async (req, res, next) => {
   try {
     const adminId = req.user._id;
-    const { name, description, companyId, managerId, teamMembers, startDate, endDate } = req.body;
+    const companyId = await User.findById(adminId).then(admin => admin.companyId);
+    if (!companyId) {
+      return sendResponse(res, STATUS.BAD_REQUEST, 'Admin is not associated with any company');
+    }
+    const { name, description, managerId, teamMembers, startDate, endDate } = req.body;
     if (!adminId) {
       return sendResponse(res, STATUS.BAD_REQUEST, 'User is not associated with any company');
     }

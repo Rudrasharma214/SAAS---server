@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useTheme } from '../../context/themeContext';
 import { createProject } from '../../services/projectServices';
-import { X, FolderPlus, FileText, Calendar } from 'lucide-react';
+import { X, FolderPlus, FileText, Calendar, UserCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const CreateProjectModal = ({ isOpen, onClose, onProjectCreated }) => {
+const CreateProjectModal = ({ isOpen, onClose, onProjectCreated, managers = [] }) => {
   const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     startDate: '',
     endDate: '',
+    managerId: '',
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -25,7 +26,7 @@ const CreateProjectModal = ({ isOpen, onClose, onProjectCreated }) => {
     try {
       await createProject(formData);
       toast.success('Project created successfully!', { id: loadingToast });
-      setFormData({ name: '', description: '', startDate: '', endDate: '' });
+      setFormData({ name: '', description: '', startDate: '', endDate: '', managerId: '' });
       onProjectCreated();
       onClose();
     } catch (error) {
@@ -63,6 +64,17 @@ const CreateProjectModal = ({ isOpen, onClose, onProjectCreated }) => {
           <div className="relative">
             <FileText size={18} className={`absolute left-3 top-3 ${isDarkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
             <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Project Description" rows="3" className={`w-full pl-10 pr-4 py-2.5 rounded-lg border transition-all ${isDarkMode ? 'bg-zinc-800 text-gray-100 border-zinc-700 focus:ring-teal-500' : 'bg-gray-50 text-gray-900 border-gray-200 focus:ring-green-500'} focus:outline-none focus:ring-2`}></textarea>
+          </div>
+          <div className="relative">
+            <UserCheck size={18} className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
+            <select name="managerId" value={formData.managerId} onChange={handleInputChange} required className={`w-full pl-10 pr-4 py-2.5 rounded-lg border transition-all appearance-none ${isDarkMode ? 'bg-zinc-800 text-gray-100 border-zinc-700 focus:ring-teal-500' : 'bg-gray-50 text-gray-900 border-gray-200 focus:ring-green-500'} focus:outline-none focus:ring-2`}>
+              <option value="">Assign Manager</option>
+              {managers.map((manager) => (
+                <option key={manager._id} value={manager._id}>
+                  {manager.name} ({manager.email})
+                </option>
+              ))}
+            </select>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">

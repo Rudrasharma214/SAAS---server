@@ -6,6 +6,7 @@ import STATUS from '../constant/statusCode.js';
 import AppError from '../utils/AppError.js';
 import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 dotenv.config();
 
 cloudinary.v2.config({
@@ -156,6 +157,8 @@ export const createManager = async (req, res, next) => {
     const adminId = req.user._id;
     const { name, email, password } = req.body;
     const company = await Company.findOne({ ownerId: adminId });
+    
+    
 
     if (!company) {
       return sendResponse(res, STATUS.NOT_FOUND, 'Company not found');
@@ -167,16 +170,20 @@ export const createManager = async (req, res, next) => {
         'Manager limit reached for your subscription plan'
       );
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newManager = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role: 'manager',
       createdBy: adminId,
       companyId: company._id,
       isRegistered: true,
     });
-    await newManager.save();
+
     sendResponse(res, STATUS.CREATED, 'Manager created successfully', newManager);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while creating manager'));
@@ -198,17 +205,21 @@ export const createEmployee = async (req, res, next) => {
         'Employee limit reached for your subscription plan'
       );
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newEmployee = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role: 'user',
       createdBy: adminId,
       companyId: company._id,
       managerId: managerId || null,
       isRegistered: true,
     });
-    await newEmployee.save();
+
     sendResponse(res, STATUS.CREATED, 'Employee created successfully', newEmployee);
   } catch (error) {
     next(new AppError(STATUS.INTERNAL_ERROR, 'An error occurred while creating employee'));
