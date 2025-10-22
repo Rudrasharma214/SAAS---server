@@ -3,11 +3,14 @@ import { useTheme } from '../../context/themeContext';
 import { getProjectsForManager } from '../../services/managerServices';
 import { FolderKanban, Users, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
+import UpdateManagerProjectModal from './UpdateManagerProjectModal';
 
 const ManagerProjects = () => {
   const { isDarkMode } = useTheme();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     fetchProjects();
@@ -34,6 +37,16 @@ const ManagerProjects = () => {
       month: 'short',
       year: 'numeric',
     });
+  };
+  
+  const handleOpenUpdateModal = (project) => {
+    setSelectedProject(project);
+    setIsUpdateModalOpen(true);
+  };
+  
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedProject(null);
   };
 
   return (
@@ -88,12 +101,24 @@ const ManagerProjects = () => {
                         {project.teamMembers.length} members
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${isDarkMode ? 'bg-blue-500/10 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
-                          {project.status}
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
+                          project.status === 'completed' 
+                            ? isDarkMode ? 'bg-green-500/10 text-green-300' : 'bg-green-100 text-green-800'
+                            : project.status === 'in-progress' 
+                              ? isDarkMode ? 'bg-orange-500/10 text-orange-300' : 'bg-orange-100 text-orange-800'
+                              : project.status === 'on-hold'
+                                ? isDarkMode ? 'bg-red-500/10 text-red-300' : 'bg-red-100 text-red-800'
+                                : isDarkMode ? 'bg-blue-500/10 text-blue-300' : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {project.status || 'planned'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <button className={`p-2 rounded-md transition-colors ${isDarkMode ? 'text-cyan-300 hover:bg-cyan-700/50 hover:text-white' : 'text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900'}`} title="Manage Team">
+                        <button 
+                          onClick={() => handleOpenUpdateModal(project)}
+                          className={`p-2 rounded-md transition-colors ${isDarkMode ? 'text-cyan-300 hover:bg-cyan-700/50 hover:text-white' : 'text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900'}`} 
+                          title="Manage Team & Status"
+                        >
                           <Users size={16} />
                         </button>
                       </td>
@@ -105,9 +130,15 @@ const ManagerProjects = () => {
           )}
         </div>
       </div>
+      {/* Update Project Modal */}
+      <UpdateManagerProjectModal 
+        isOpen={isUpdateModalOpen}
+        onClose={handleCloseUpdateModal}
+        onProjectUpdated={fetchProjects}
+        project={selectedProject}
+      />
     </div>
   );
-
 };
 
 export default ManagerProjects;

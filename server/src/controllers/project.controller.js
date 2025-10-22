@@ -48,14 +48,32 @@ export const updateProject = async (req, res, next) => {
   try {
     const { projectId } = req.params;
     const updateData = req.body;
+    const userId = req.user._id;
+    const userRole = req.user.role;
+    
+    // Create a query that checks if the user is either the admin or the manager of the project
+    const query = { _id: projectId };
+    if (userRole === 'admin') {
+      query.adminId = userId;
+    } else if (userRole === 'manager') {
+      query.managerId = userId;
+    } else {
+      return sendResponse(
+        res,
+        STATUS.FORBIDDEN,
+        'You do not have permission to update this project'
+      );
+    }
+    
     const project = await Project.findOneAndUpdate(
-      { _id: projectId, adminId: req.user._id },
+      query,
       updateData,
       {
         new: true,
         runValidators: true,
       }
     );
+    
     if (!project) {
       return sendResponse(
         res,
@@ -87,15 +105,3 @@ export const deleteProject = async (req, res, next) => {
   }
 };
 
-
-
-export const getProjectForUser = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const projects = await Project.find({ teamMembers: userId })
-      .populate('managerId', 'name email'); // Populate manager with name and email
-    sendResponse(res, STATUS.OK, 'Projects retrieved successfully', projects);
-  } catch (error) {
-    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
-  }
-}

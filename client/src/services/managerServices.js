@@ -33,7 +33,7 @@ export const addTeamMembersToProject = async (projectId, includes) => {
     const response = await api.post(`/manager/project/${projectId}/addteam`, { includes });
     return response.data;
   } catch (error) {
-    throw new Error('Error adding team members to project');
+    throw new Error('Error updating project details');
   } 
 };
 

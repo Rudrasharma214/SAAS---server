@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/themeContext';
 import Sidebar_ME, { Sidebar_MEItem } from '../../components/Sidebar_ME.jsx';
-import { LayoutDashboard, Building, Package, Settings } from 'lucide-react';
+import { LayoutDashboard, Building, Package, Settings, UserCheck, User } from 'lucide-react';
 
 const ManagerDashboard = () => {
   const { isDarkMode } = useTheme();
@@ -14,6 +14,8 @@ const ManagerDashboard = () => {
     ? 'attendance'
     : path.includes('projects')
       ? 'projects'
+      : path.includes('employee')
+        ? 'employee'
       : 'dashboard';
 
 
@@ -38,6 +40,12 @@ const ManagerDashboard = () => {
           text="Attendance"
           active={activeSection === 'attendance'}
           onClick={() => navigate('/manager/dashboard/attendance')}
+        />
+        <Sidebar_MEItem
+          icon={<User size={20} />}
+          text="Employee"
+          active={activeSection === 'employee'}
+          onClick={() => navigate('/manager/dashboard/employee')}
         />
         <Sidebar_MEItem
           icon={<Package size={20} />}

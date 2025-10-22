@@ -41,27 +41,3 @@ export const getProjectForManager = async (req, res, next) => {
   }
 };
 
-export const managerAddTeamMember = async (req, res, next) => {
-  try {
-    const managerId = req.user._id;
-    const { projectId } = req.params;
-    const { includes } = req.body;
-    const project = await Project.findOne({ _id: projectId, managerId });
-    if (!project) {
-      return sendResponse(
-        res,
-        STATUS.NOT_FOUND,
-        'Project not found or you do not have permission to update it'
-      );
-    }
-    // Add new team members, avoiding duplicates
-    const newMembers = includes.filter(
-      (userId) => !project.teamMembers.includes(userId)
-    );
-    project.teamMembers.push(...newMembers);
-    await project.save();
-    sendResponse(res, STATUS.OK, 'Team members added successfully', project);
-  } catch (error) {
-    next(new AppError(STATUS.INTERNAL_ERROR, error.message));
-  }
-};

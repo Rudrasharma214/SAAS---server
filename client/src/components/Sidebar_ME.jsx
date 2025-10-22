@@ -47,7 +47,7 @@ export default function Sidebar_ME({ children }) {
     <div
       className={`h-screen flex items-center justify-start ${
         isDarkMode
-          ? "bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900"
+          ? "bg-gradient-to-l to-stone-800 from-slate-600"
           : "bg-gradient-to-br from-orange-50/30 via-amber-50/20 to-yellow-50/30"
       }`}
     >
@@ -61,7 +61,7 @@ export default function Sidebar_ME({ children }) {
         <nav
           className={`relative h-full flex flex-col overflow-visible rounded-r-4xl border ${
             isDarkMode
-              ? "text-gray-100 bg-gradient-to-b from-slate-800 to-gray-900 border-gray-700"
+              ? "text-gray-100 bg-gradient-to-b from-slate-700 to-gray-800 border-gray-600"
               : "text-gray-800 bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-200/50 border-gray-100"
           }`}
         >

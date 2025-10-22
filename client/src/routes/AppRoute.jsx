@@ -30,12 +30,13 @@ import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
 import ManagerDashboardContent from '../components/manager/ManagerDashboardContent';
 import ManagerAttandance from '../components/manager/ManagerAttandance.jsx';
 import ManagerProjects from '../components/manager/ManagerProjects.jsx';
-
+import ManagerEmployee from '../components/manager/ManagerEmployee.jsx';
 // user section components
 import UserDashboard from '../pages/user/UserDashboard.jsx';
 import UserDashboardContent from '../components/user/UserDashboardContent.jsx';
 import Attandance from '../components/user/Attandance.jsx';
 import UserProjects from '../components/user/UserProjects.jsx';
+
 
 const DeviceCheckedSuperAdminDashboard = withDeviceCheck(SuperAdminDashboard);
 const DeviceCheckedAdminDashboard = withDeviceCheck(AdminDashboard);
@@ -82,6 +83,7 @@ const AppRoute = () => {
         <Route element={<DeviceCheckedManagerDashboard />}>
           <Route index element={<ManagerDashboardContent />} />
           <Route path="attendance" element={<ManagerAttandance />} />
+          <Route path="employee" element={<ManagerEmployee />} />
           <Route path="projects" element={<ManagerProjects />} />
         </Route>
       </Route>
